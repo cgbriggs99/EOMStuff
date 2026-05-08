@@ -1,0 +1,177 @@
+\documentclass{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{mathtools}
+
+\newcommand{\tei}[2]{\left<{#1}\middle|\middle|{#2}\right>}
+\newcommand{\ttau}{\tilde{\tau}}
+
+\begin{document}
+
+\section{Matrix Elements}
+
+Define the following matrix elements to make things go easier.
+
+\begin{equation}
+  \tau_{ij}^{ab} = t_{ij}^{ab} + t_i^at_j^b - t_i^bt_j^a
+\end{equation}
+
+\begin{equation}
+  \tilde{\tau}_{ij}^{ab} = \frac{1}{2}t_{ij}^{ab} + t_i^at_j^b
+\end{equation}
+
+\subsection{One Particle}
+
+\begin{equation}
+  \overline{H}_1 = \sum_{pq} F_{pq} N\left[\hat{a}_p^\dagger\hat{a}_q\right]
+\end{equation}
+
+\begin{equation}
+  F_{ij} = f_{ij} + \sum_a t_j^a f_{ia} + \sum_{ka}t_k^a \tei{ki}{aj} + \frac{1}{2}\sum_{kab} \tau_{kj}^{ba}\tei{ki}{ba}
+\end{equation}
+
+\begin{equation}
+  F_{ab} = f_{ab} - \sum_i t_i^a f_{ib} + \sum_{ic} t_i^c \tei{ia}{cb} - \frac{1}{2}\sum_{ijc}\tau_{ij}^{ca} \tei{ij}{cb}
+\end{equation}
+
+\begin{equation}
+  F_{ia} = f_{ia} - \sum_{jb}t_j^b \tei{ij}{ab}
+\end{equation}
+
+Note that $F_{ai}$ is the expression for the $T_1$ residual. At convergence of CCSD, this residual is zero.
+
+\begin{equation}
+  F_{ai} = 0
+\end{equation}
+
+\subsection{Two Particle}
+
+\begin{equation}
+  \overline{H}_2 = \sum_{pqrs} W_{pqrs}N\left[\hat{a}_p^\dagger\hat{a}_q^\dagger\hat{a}_s\hat{a}_r\right]
+\end{equation}
+
+\begin{equation}
+  W_{ijkl} = \tei{ij}{kl} + P_{kl}^-\sum_a t_k^a\tei{ij}{al} + \frac{1}{2}\sum_{ab}\tau_{kl}^{ab}\tei{ij}{ab}
+\end{equation}
+
+\begin{equation}
+  W_{iajb} = \tei{ia}{jb} - \sum_kt_k^a\tei{ik}{jb} + \sum_ct_j^c\tei{ia}{cb} - \sum_{kc}\left(t_{jk}^{ca} + t_j^ct_k^a\right)\tei{ik}{cb}
+\end{equation}
+
+\begin{equation}
+  W_{abcd} = \tei{ab}{cd} - P_{ab}^-\sum_kt_k^a\tei{kb}{cd} + \frac{1}{2}\sum_{kl}\tau_{kl}^{ab}\tei{kl}{cd}
+\end{equation}
+
+\begin{multline}
+  W_{iajk} = \tei{ia}{jk} + \sum_b t_{jk}^{ba}f_{ib} - \sum_lt_l^a\tei{li}{jk} + P^-_{jk}\sum_b t_k^b\tei{ia}{jb} - P^-_{jk}\sum_{lb}t_k^bt_l^a\tei{li}{bj} \\
+  + \frac{1}{2}P_{jk}^-\sum_{bc}t_j^bt_k^c\tei{ia}{bc} - \frac{1}{2}P_{jk}^-\sum_{lbc}t_j^bt_k^ct_l^a\tei{il}{bc} + P_{jk}^-\sum_{lb}t_{kl}^{ab}\tei{li}{bj} + \frac{1}{2}\sum_{bc}t_{jk}^{bc}\tei{ia}{bc} + P_{jk}^-\sum_{lbc}t_{lk}^{ca}t_j^b\tei{il}{bc}\\
+  - \frac{1}{2}\sum_{lbc}t_{jk}^{bc}t_l^a\tei{li}{bc} + \sum_{lbc}t_{jk}^{ac}t_l^b\tei{li}{bc}
+\end{multline}
+
+Simplify.
+
+\begin{multline}
+  W_{iajk} = \tei{ia}{jk} + \sum_b t_{jk}^{ba}F_{ib} - \sum_lt_l^aW_{lijk} - P^-_{jk}\sum_c t_j^c\left(\tei{ia}{kc} - \sum_{lb} t_{kl}^{ab}\tei{li}{bc}\right)\\
+  + \frac{1}{2}\sum_{bc}\tau_{jk}^{bc}\tei{ia}{bc} + P_{jk}^-\sum_{lb}t_{kl}^{ab}\tei{li}{bj}
+\end{multline}
+
+\begin{multline}
+  W_{abic} = \tei{ab}{ic} - \sum_mt_{mi}^{ab}f_{mc} + \sum_et_i^e\tei{ab}{ec} - P_{ab}^-\sum_m t_m^a\tei{mb}{ic} - P_{ab}^-\sum_{me} t_m^bt_i^e\tei{ma}{ce}\\
+  + \frac{1}{2}P_{ab}^-\sum_{mn} t_m^at_n^b\tei{mn}{ci} + \frac{1}{2}P_{ab}^-\sum_{me}t_m^bt_i^et_n^a\tei{mn}{ce} + \frac{1}{2}\sum_{mn}t_{mn}^{ab}\tei{mn}{ci} - P_{ab}^-\sum_{me}t_{im}^{ae}\tei{mb}{ec}\\
+  + \frac{1}{2}\sum_{mne}t_{mn}^{ab}t_i^e\tei{mn}{ec} + \sum_{mne}t_{ni}^{ba}t_m^e\tei{mn}{ec} + P_{ab}^-\sum_{mne}t_{ni}^{ea}t_m^b\tei{mn}{ec}
+\end{multline}
+
+Simplify.
+
+\begin{multline}
+  W_{abic} = \tei{ab}{ic} - \sum_mt_{mi}^{ab}F_{mc} + \sum_et_i^eW_{abec} - P_{ab}^-\sum_m t_m^a\left(\tei{mb}{ic} + \sum_{ne}t_{ni}^{eb}\tei{mn}{ec}\right) \\
+  + \frac{1}{2}\sum_{mn} \tau_{mn}^{ab}\tei{mn}{ci} - P_{ab}^-\sum_{me}t_{im}^{ae}\tei{mb}{ec}
+\end{multline}
+
+\begin{equation}
+  W_{ijak} = \tei{ij}{ak} + \sum_{e}t_k^e\tei{ij}{ae}
+\end{equation}
+
+\begin{equation}
+  W_{iabc} = \tei{ia}{bc} - \sum_mt_m^a\tei{im}{bc}
+\end{equation}
+
+The value $W_{abij}$ is simply the $T_2$ residual, which at CCSD convergence should be zero.
+
+\begin{equation}
+  W_{abij} = 0
+\end{equation}
+
+\begin{equation}
+  W_{ijab} = \tei{ij}{ab}
+\end{equation}
+
+\section{Right Vector}
+
+Now that we have the diagrams, we need to compute the following.
+
+\begin{equation}
+  \left<\Phi_\mu\middle|\overline{H}\hat{R}\middle|\Phi_0\right>
+\end{equation}
+
+\subsection{Zero-order terms}
+
+\begin{equation}
+  \left<\Phi_0\middle|\overline{H}\hat{R}_0\middle|\Phi_0\right> = r_0 E_{CCSD}
+\end{equation}
+
+\begin{equation}
+  \left<\Phi_i^a\middle|\overline{H}\hat{R}_0\middle|\Phi_0\right> = 0
+\end{equation}
+
+\begin{equation}
+  \left<\Phi_{ij}^{ab}\middle|\overline{H}\hat{R}_0\middle|\Phi_0\right> = 0
+\end{equation}
+
+\subsection{First-order terms}
+
+\begin{equation}
+  \left<\Phi_0\middle|\overline{H}\hat{R}_1\middle|\Phi_0\right> = \sum_{me}r_m^eF_{me}
+\end{equation}
+
+\begin{equation}
+  \left<\Phi_i^a\middle|\overline{H}\hat{R}_1\middle|\Phi_0\right> = \sum_m r_m^a F_{mi} - \sum_e r_i^e F_{ae} - \sum_{me} r_m^e W_{maei}
+\end{equation}
+
+\begin{equation}
+  \left<\Phi_{ij}^{ab}\middle|\overline{H}\hat{R}_1\middle|\Phi_0\right> = P_{ij}^-\sum_er_i^eW_{abej} - P_{ab}^-\sum_mr_m^aW_{mbij}
+\end{equation}
+
+\subsection{Second-order terms}
+
+\begin{equation}
+  \left<\Phi_0\middle|\overline{H}\hat{R}_2\middle|\Phi_0\right> = \frac{1}{4}\sum_{mnef} r_{mn}^{ef}W_{mnef}
+\end{equation}
+
+\begin{equation}
+  \left<\Phi_i^a\middle|\overline{H}\hat{R}_2\middle|\Phi_0\right> = -\sum_{me}r_{mi}^{ae}F_{me} + \frac{1}{2}\sum_{mne}r_{mn}^{ea}W_{mnei} - \frac{1}{2}\sum_{mef} r_{mi}^{ef}W_{maef}
+\end{equation}
+
+\begin{equation}
+  \left<\Phi_{ij}^{ab}\middle|\overline{H}\hat{R}_2\middle|\Phi_0\right> = -P_{ij}^-\sum_m r_{mj}^{ab}F_{mi} + P_{ab}^-\sum_e r_{ij}^{eb}F_{ae} + \frac{1}{2}\sum_{mn} r_{mn}^{ab}W_{mnij} + \frac{1}{2}\sum_{ef} r_{ij}^{ef}W_{abef} - P_{ij}^-P_{ab}^-\sum_{me}r_{im}^{ae}W_{mbej}
+\end{equation}
+
+\subsection{Combined expressions}
+
+\begin{equation}
+  \left<\Phi_0\middle|\overline{H}\hat{R}\middle|\Phi_0\right> = r_0E_{CCSD} + \sum_{me}r_m^eF_{me} + \frac{1}{4}\sum_{mnef}r_{mn}^{ef}W_{mnef}
+\end{equation}
+
+\begin{equation}
+  \left<\Phi_i^a\middle|\overline{H}\hat{R}\middle|\Phi_0\right> = \sum_mr_m^aF_{mi} - \sum_er_i^eF_{ae} - \sum_{me}r_m^eW_{maei} - \sum_{me}r_{mi}^{ae}F_{me} + \frac{1}{2}\sum_{mne}r_{mn}^{ae}W_{mnei} - \frac{1}{2}\sum_{mef}r_{mi}^{ef}W_{maef}
+\end{equation}
+
+\begin{multline}
+  \left<\Phi_{ij}^{ab}\middle|\overline{H}\hat{R}\middle|\Phi_0\right> = P_{ij}^-\sum_er_i^eW_{abej} - P_{ab}^-\sum_mr_m^aW_{mbij} - P_{ij}^-\sum_mr_{mj}^{ab}F_{mi} + P_{ab}^-\sum_er_{ij}^{eb}F_{ae} + \frac{1}{2}\sum_{mn}r_{mn}^{ab}W_{mnij} \\
+  + \frac{1}{2}\sum_{ef}r_{ij}^{ef}W_{abef} - P_{ij}^-P_{ab}^-\sum_{me}r_{im}^{ae}W_{mbej}
+\end{multline}
+
+\end{document}

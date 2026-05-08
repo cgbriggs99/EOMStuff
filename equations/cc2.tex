@@ -1,0 +1,319 @@
+\documentclass{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{mathtools}
+
+\newcommand{\tei}[2]{\left<{#1}\middle|\middle|{#2}\right>}
+\newcommand{\ttau}{\tilde{\tau}}
+
+\begin{document}
+
+\section{Background}
+
+The coupled-cluster Lagrangian can be defined as follows.
+
+\begin{equation}
+  L = \left<\Phi_0\middle|\left(1 + \hat{\Lambda}\right)\overline{H}\middle|\Phi_0\right>
+\end{equation}
+
+We can then take derivatives with respect to the Lagrangian multipliers to get the defining equations for the $T$ amplitudes.
+
+\begin{equation}
+  \frac{\partial L}{\partial \lambda_\mu} = \left<\mu\middle|\overline{H}\middle|\Phi_0\right> = 0
+\end{equation}
+
+If we take derivatives with respec to the $T$ amplitudes, we get equations for the Lagrangian multipliers.
+
+\begin{equation}
+  \frac{\partial L}{\partial t_\mu} = \left<\Phi_0\middle|\overline{H}\middle|\mu\right> + \left<\Phi_0\middle|\hat{\Lambda}\left[\overline{H}, \hat{\tau}_\mu\right]\middle|\mu\right> = 0
+\end{equation}
+
+Now, we can expand these in terms of perturbations. For the operators, we get that $\hat{F}_N$ contributes to zeroth order and $\hat{W}_N$ contributes to first order. For the $T$ and $\Lambda$ amplitudes, we expand them out in terms of perturbation order. Perturbation order is not related to excitation order.
+
+\begin{equation}
+  \hat{T} = \hat{T}^{(0)} + \hat{T}^{(1)} + \hat{T}^{(2)} + \cdots
+\end{equation}
+
+\begin{equation}
+  \hat{\Lambda} = \hat{\Lambda}^{(0)} + \hat{\Lambda}^{(1)} + \hat{\Lambda}^{(2)} + \cdots
+\end{equation}
+
+\begin{equation}
+  \frac{\partial L^{(n)}}{\partial \lambda_\mu^{(n)}} = \left<\mu\middle|\left(\hat{H}_Ne^{\hat{T}}\right)^{(n)}_C\middle|\Phi_0\right>
+\end{equation}
+
+\begin{equation}
+  \frac{\partial L^{(n)}}{\partial t_\mu^{(n)}} = \left<\Phi_0\middle|\left(\hat{H}_Ne^{\hat{T}}\right)^{(n)}_C\middle|\mu\right> + \sum_{m = 1}^{n - 1}\left<\Phi_0\middle|\hat{\Lambda}^{(m)}\left[\overline{H}^{(n - m)}, \hat{\tau}_\mu\right]\middle|\Phi_0\right> + \left<\Phi_0\middle|\hat{\Lambda}^{(n)}\hat{F}_N\middle|\mu\right>
+\end{equation}
+
+At zeroth order, we get the following. The only zeroth order operation is the $\hat{F}_N$ operator.
+
+\begin{equation}
+  \frac{\partial L^{(0)}}{\partial \lambda_\mu^{(0)}} = \left<\mu\middle|\hat{F}_N + \left[\hat{F}_N, \hat{T}^{(0)}\right]\middle|\Phi_0\right> = \varepsilon_\mu t_\mu^{(0)} = 0
+\end{equation}
+
+\begin{equation}
+  \frac{\partial L^{(0)}}{\partial t_\mu^{(0)}} = \left<\Phi_0\middle|\hat{F}_N + \left[\hat{F}_N, \hat{T}^{(0)}\right]\middle|\mu\right> + \left<\Phi_0\middle|\hat{\Lambda}^{(0)}\hat{F}_N\middle|\mu\right> = \varepsilon_\mu\lambda_\mu^{(0)} = 0
+\end{equation}
+
+This means that the zeroth order amplitudes are zero. Now for first order. This is the first term where we get a $\hat{W}_N$ since this operator is treated as a first-order operator.
+
+\begin{equation}
+  \frac{\partial L^{(1)}}{\partial \lambda_\mu^{(1)}} = \left<\mu\middle|\left[\hat{F}_N, \hat{T}^{(1)}\right] + \hat{W}_N\middle|\Phi_0\right> = 0
+\end{equation}
+
+Solve for the individual excitations. Note that this assumes canonical orbitals.
+
+\begin{equation}
+  \left<\Phi_i^a\middle|\left[\hat{F}_N, \hat{T}^{(1)}\right] + \hat{W}_N\middle|\Phi_0\right> = \varepsilon_i^at_i^{a(1)} = 0
+\end{equation}
+
+\begin{equation}
+  \left<\Phi_{ij}^{ab}\middle|\left[\hat{F}_N, \hat{T}^{(1)}\right] + \hat{W}_N\middle|\Phi_0\right> = \varepsilon_{ij}^{ab}t_{ij}^{ab(1)} + \tei{ab}{ij} = 0
+\end{equation}
+
+\begin{equation}
+  \left<\phi_{ijk\cdots}^{abc\cdots}\middle|\left[\hat{F}_N, \hat{T}^{(1)}\right] + \hat{W_N}\middle|\Phi_0\right> = \varepsilon_{ijk\cdots}^{abc\cdots}t_{ijk\cdots}^{abc\cdots(1)} = 0
+\end{equation}
+
+This means that only the $\hat{T}_2$ amplitudes contribute at first order. All other amplitudes are zero.
+
+\begin{equation}
+  t_{ij}^{ab(1)} = \frac{\tei{ab}{ij}}{\varepsilon_{ab}^{ij}}
+\end{equation}
+
+As this continues, only the operators and commutators between operators with a total order equal to the perturbation order are considered, keeping in mind that the $\hat{F}_N$ operator is considered zeroth order and the $\hat{W}_N$ operator is considered first order.
+
+\section{CC2 Equations}
+
+The CCn model uses the $T_1$-transformed Hamiltonian, effectively treating the $T_1$ amplitudes as zeroth order operators, then expanding perturbatively until the first non-vanishing $\hat{T}_n$ contribution. When doing this, $\hat{F}_N$ is still zeroth order, but $\tilde{F}_N$ is treated as first-order. The CC2 model therefore uses first-order $\hat{T}_2$ amplitudes and second-order $\hat{T}_1$ amplitudes, as higher $\hat{T}_1$ amplitudes depend on things other than single and double excitations. Expanding the perturbations gives the following. Note that $\hat{T}^{(n)}$ does not contain singles contributions, since all single contributions are wrapped up in the Hamiltonian operators. We will also assume that the zeroth order amplitudes are still zero, since they will all be wrapped up in higher orders.
+
+\begin{equation}
+  \left<\Phi_0\middle|\left(\hat{H}e^{\hat{T}}\right)_C\middle|\Phi_0\right> = \frac{1}{4} \sum_{ijab}t_{ij}^{ab}\tei{ij}{ab} + \frac{1}{2}\sum_{ijab}t_i^at_j^b\tei{ij}{ab}
+\end{equation}
+
+\begin{equation}
+  \left<\Phi_i^a\middle|\tilde{F}_N + \left[\tilde{F}_N, \hat{T}_2\right] + \left[\tilde{W}_N, \hat{T}_2\right]\middle|\Phi_0\right> = \tilde{f}_{ai} + \sum_{me} t_{im}^{ae}\tilde{f}_{me} + \frac{1}{2}\sum_{mef} t_{im}^{ef}\tilde{\tei{am}{ef}} - \frac{1}{2}\sum_{mne} t_{mn}^{ae}\tilde{\tei{mn}{ie}}
+\end{equation}
+
+This equation is missing $\hat{W}_N$ and $\left(\tilde{H}_N, \hat{T}_2^2\right)_C$ contributions because these provide excitations that are too high for the singles amplitudes, and thus will vanish. They would normally need to be considered for other amplitude equations, though.
+
+\begin{equation}
+  \left<\Phi_{ij}^{ab}\middle|\left[\hat{F}_N, \hat{T}_2\right] + \tilde{W}_N\middle|\Phi_0\right> = \epsilon_{ij}^{ab}t_{ij}^{ab} + \tilde{\tei{ab}{ij}}
+\end{equation}
+
+Note that this uses $\hat{F}_N$ not $\tilde{F}_N$, since $\tilde{F}_N$ is first order. This would make the commutator second order, which does not contribute in this first-order expansion.
+
+\subsection{Spin Integration}
+
+Now, we spin integrate, using the biorthogonal basis $\left<\tilde{\Phi}_{ij}^{ab}\right| = \frac{1}{3}\left<2\Phi_{ij}^{ab} + \Phi_{ij}^{ba}\right|$.
+
+\begin{equation}
+  E_{CC2} = \sum_{ijab} t_{ij}^{ab}L_{ijab} + \sum_{ijab}t_i^at_j^bL_{ijab}
+\end{equation}
+
+We will need to factor out the resolvent from the first term.
+
+\begin{equation}
+  R_i^a = 2\tilde{f}_{ai} + \sum_{me}\left(2t_{im}^{ae} - t_{im}^{ea}\right)\tilde{f}_{me} + 2\sum_{mef}t_{im}^{ef}\tilde{L}_{amef} - 2\sum_{mne}t_{mn}^{ae}\tilde{L}_{mnie}
+\end{equation}
+
+\begin{equation}
+  R_{ij}^{ab} = 2\varepsilon_{ij}^{ab}t_{ij}^{ab} + 2\tilde{\left<ab\middle|ij\right>}
+\end{equation}
+
+\subsection{Density Fitting}
+
+\begin{equation}
+  E_{CC2} = \sum_{ab}\sum_{ij}\left(t_{ij}^{ab} + t_i^at_j^b\right)\sum_Q\left(2b_{ia}^Qb_{jb}^Q - b_{ib}^Qb_{ja}^Q\right)
+\end{equation}
+
+\begin{equation}
+  R_i^a = 2\tilde{f}_{ai} + \sum_{me}\left(2t_{im}^{ae} - t_{im}^{ea}\right)\tilde{f}_{me} + 2\sum_m\sum_{ef}t_{im}^{ef}\sum_Q\left(2\tilde{b}_{ae}^Q\tilde{b}_{mf}^Q - \tilde{b}_{af}^Q \tilde{b}_{me}^Q\right) - 2\sum_e\sum_{mn}t_{mn}^{ae}\sum_Q\left(2\tilde{b}_{mi}^Q\tilde{b}_{ne}^Q - \tilde{b}_{me}^Q\tilde{b}_{ni}\right)
+\end{equation}
+
+\begin{equation}
+  R_{ij}^{ab} = 2\varepsilon_{ij}^{ab}t_{ij}^{ab} + 2\sum_Q\tilde{b}_{ai}\tilde{b}_{bj}
+\end{equation}
+
+\section{$T_1$-Transformed Quantities}
+
+The factored $T_1$-transformed quantities are as follows.
+
+\subsection{Fock Terms}
+
+\begin{equation}
+  \tilde{f}_{ia} = f_{ia} + \sum_{ke} t_k^eL_{kiea} = \sum_{ke} t_k^e L_{kiea}
+\end{equation}
+
+\begin{equation}
+  \tilde{f}_{ij} = f_{ij} + \sum_et_j^e\tilde{f}_{ie} + \sum_{ke} t_k^eL_{kiej} = \delta_{ij}\varepsilon_i +  \sum_{ke} t_k^eL_{kiej} + \sum_et_j^e\tilde{f}_{ie}
+\end{equation}
+
+\begin{equation}
+  \tilde{f}_{ab} = f_{ab} - \sum_mt_m^a\tilde{f}_{mb} + \sum_{ke}t_k^eL_{kaeb} = \delta_{ab}\varepsilon_a + \sum_{ke}t_k^eL_{kaeb} - \sum_mt_m^a\tilde{f}_{mb}
+\end{equation}
+
+\begin{equation}
+  \tilde{f}_{ai} = f_{ai} + \sum_et_i^e\tilde{f}_{ae} - \sum_mt_m^a\left(\tilde{f}_{mi} - \sum_et_i^e\tilde{f}_{me}\right) + \sum_{ke}t_k^eL_{kaei}
+\end{equation}
+\begin{equation}
+  = \sum_et_i^e\tilde{f}_{ae} - \sum_mt_m^a\left(\tilde{f}_{mi} - \sum_et_i^e\tilde{f}_{me}\right) + \sum_{ke}t_k^eL_{kaei}
+\end{equation}
+
+If we let $\tilde{f}'_{ab} = \tilde{f}_{ab} - \varepsilon_a\delta_{ab}$ and $\tilde{f}'_{ij} = \tilde{f}_{ij} - \varepsilon_i\delta_{ij}$, we can get the following.
+
+\begin{equation}
+  \tilde{f}'_{ij} = (1 - \delta_{ij})f_{ij} + \sum_et_j^e\tilde{f}_{ie} + \sum_{ke} t_k^eL_{kiej} = \sum_{ke} t_k^eL_{kiej} + \sum_et_j^e\tilde{f}_{ie}
+\end{equation}
+
+\begin{equation}
+  \tilde{f}'_{ab} = (1 - \delta_{ab})f_{ab} - \sum_mt_m^a\tilde{f}_{mb} + \sum_{ke}t_k^eL_{kaeb} = \sum_{ke}t_k^eL_{kaeb} - \sum_mt_m^a\tilde{f}_{mb}
+\end{equation}
+
+Now, we can define $\tilde{f}'_{ai} = \tilde{f}_{ai} - \varepsilon_i^at_i^a$.
+
+\begin{equation}
+  \tilde{f}'_{ai} = f_{ai} + \sum_et_i^e\tilde{f}'_{ae} - \sum_mt_m^a\left(\tilde{f}'_{mi} -\sum_et_i^e\tilde{f}_{me}\right) + \sum_{ke}t_k^eL_{kaei}
+\end{equation}
+\begin{equation}
+  = \sum_et_i^e\tilde{f}'_{ae} - \sum_mt_m^a\left(\tilde{f}'_{mi} - \sum_et_i^e\tilde{f}_{me}\right) + \sum_{ke}t_k^eL_{kaei}
+\end{equation}
+
+\subsubsection{Density Fitted Fock Elements}
+
+Here are expressions for the Fock elements with density fitting on the Coulomb and Exchange parts. Note that there will need to be three extra intermediates for these: $t_k^eb_{ke}^Q$, $t_k^eb_{ie}^Q$, $t_k^eb_{ae}^Q$. The first will be a vector in $Q$, and the other two will be three-index quantities.
+
+\begin{equation}
+  \tilde{f}_{ia} = f_{ia} + 2\sum_Qb_{ia}^Q\sum_{ke}t_k^eb_{ke}^Q - \sum_{kQ}b_{ka}^Q\sum_{e}t_k^eb_{ie}^Q
+\end{equation}
+
+\begin{equation}
+  \tilde{f}_{ij} = f_{ij} + \sum_e t_j^e\tilde{f}_{ie} + 2\sum_Qb_{ij}^Q\sum_{ke}t_k^eb_{ke}^Q - \sum_{kQ}b_{kj}^Q\sum_{e}t_k^eb_{ie}^Q
+\end{equation}
+
+\begin{equation}
+  \tilde{f}_{ab} = f_{ab} - \sum_mt_m^a\tilde{f}_{mb} + 2\sum_Qb_{ab}^Q\sum_{ke}t_k^eb_{ke}^Q - \sum_{kQ}b_{kb}^Q\sum_{e}t_k^eb_{ae}^Q
+\end{equation}
+
+\begin{equation}
+  \tilde{f}_{ai} = f_{ai} + \sum_et_i^e\tilde{f}_{ae} - \sum_mt_m^a\left(\tilde{f}_{mi} - \sum_et_i^e\tilde{f}_{me}\right) + 2\sum_Qb_{ai}^Q\sum_{ke}t_k^eb_{ke}^Q - \sum_{kQ}b_{ki}^Q\sum_{e}t_k^eb_{ae}^Q
+\end{equation}
+
+\subsection{Two-electron Integrals}
+
+The forms given have occupied orbitals in the leftmost spots possible. The only exception is when the bra and ket both have one occupied and one virtual, in which case, there are two distinct cases that can not be related using particle swap symmetry.
+
+\begin{equation}
+  \tilde{\left<ij\middle|ab\right>} = \left<ij\middle|ab\right>
+\end{equation}
+
+\begin{equation}
+  \tilde{\left<ij\middle|ka\right>} = \left<ij\middle|ka\right> + \sum_et_k^e\left<ij\middle|ea\right>
+\end{equation}
+
+\begin{equation}
+  \tilde{\left<ia\middle|bc\right>} = \left<ia\middle|bc\right> - \sum_mt_m^a\left<im\middle|bc\right>
+\end{equation}
+
+\begin{equation}
+  \tilde{\left<ij\middle|kl\right>} = \left<ij\middle|kl\right> + \frac{1}{2}P_{ik,jl}\sum_{e}t_l^e\left(\left<ij\middle|ke\right> + \tilde{\left<ij\middle|ke\right>}\right)
+\end{equation}
+
+\begin{equation}
+  \tilde{\left<ab\middle|cd\right>} = \left<ab\middle|cd\right> - \frac{1}{2}P_{ac,bd}\sum_mt_m^a\left(\left<mb\middle|cd\right> + \tilde{\left<mb\middle|cd\right>}\right)
+\end{equation}
+
+\begin{equation}
+  \tilde{\left<ia\middle|jb\right>} = \left<ia\middle|jb\right> - \sum_mt_m^a\tilde{\left<im\middle|jb\right>} + \sum_et_j^e\left<ia\middle|eb\right>
+\end{equation}
+
+\begin{equation}
+  \tilde{\left<ia\middle|bj\right>} = \left<ia\middle|bj\right> - \sum_mt_m^a\tilde{\left<mi\middle|jb\right>} + \sum_et_j^e\left<ia\middle|be\right>
+\end{equation}
+
+\begin{equation}
+  \tilde{\left<ia\middle|jk\right>} = \left<ia\middle|jk\right> + \sum_et_j^e\tilde{\left<ia\middle|ek\right>} - \sum_mt_m^a\left(\left<im\middle|jk\right> + \sum_et_k^e\left<im\middle|je\right>\right) + \sum_et_k^e\left<ia\middle|je\right>
+\end{equation}
+
+\begin{equation}
+  \tilde{\left<ab\middle|ic\right>} = \left<ab\middle|ic\right> - \sum_mt_m^a\tilde{\left<mb\middle|ic\right>} - \sum_mt_m^b\left(\left<am\middle|ic\right> + \sum_et_i^e\left<am\middle|ec\right>\right) + \sum_et_i^e\left<ab\middle|je\right>
+\end{equation}
+
+\begin{equation}
+  \tilde{\left<ab\middle|ij\right>} = \left<ab\middle|ij\right> + P_{ia,jb}\sum_et_i^e\left(\tilde{\left<ba\middle|je\right>} - \frac{1}{2}\sum_ft_j^f\tilde{\left<ab\middle|ef\right>}\right) - P_{ia,jb}\sum_mt_m^a\left(\left<mb\middle|ij\right> - \frac{1}{2}\sum_nt_n^b\left<mn\middle|ij\right>\right)
+\end{equation}
+
+\subsection{Coulomb-Exchange Terms}
+
+These have the exact same form as the two-electron integrals. They are given anyway to help coding.
+
+\begin{equation}
+  \tilde{L}_{pqrs} = 2\tilde{\left<pq\middle|rs\right>} - \tilde{\left<pq\middle|sr\right>}
+\end{equation}
+\begin{equation}
+  L_{pqrs} = 2\left<pq\middle|rs\right> - \left<pq\middle|sr\right>
+\end{equation}
+
+\begin{equation}
+  \tilde{L}_{ijab} = L_{ijab}
+\end{equation}
+
+\begin{equation}
+  \tilde{L}_{ijka} = L_{ijka} + \sum_et_k^eL_{ijea}
+\end{equation}
+
+\begin{equation}
+  \tilde{L}_{iabc} = L_{iabc} - \sum_mt_m^aL_{imbc}
+\end{equation}
+
+\begin{equation}
+  \tilde{L}_{ijkl} = L_{ijkl} + \frac{1}{2}P_{ik,jl}\sum_{e}t_l^e\left(L_{ijke} + \tilde{L}_{ijke}\right)
+\end{equation}
+
+\begin{equation}
+  \tilde{L}_{abcd} = L_{abcd} - \frac{1}{2}P_{ac,bd}\sum_mt_m^a\left(L_{mbcd} + \tilde{L}_{mbcd}\right)
+\end{equation}
+
+\begin{equation}
+  \tilde{L}_{iajb} = L_{iajb} - \sum_mt_m^a\tilde{L}_{imjb} + \sum_et_j^eL_{iaeb}
+\end{equation}
+
+\begin{equation}
+  \tilde{L}_{iabj} = L_{iabj} - \sum_mt_m^a\tilde{L}_{mijb} + \sum_et_j^eL_{iabe}
+\end{equation}
+
+\begin{equation}
+  \tilde{L}_{iajk} = L_{iajk} + \sum_et_j^e\tilde{L}_{iaek} - \sum_mt_m^a\left(L_{imjk} + \sum_et_k^eL_{imje}\right) + \sum_et_k^eL_{iaje}
+\end{equation}
+
+\begin{equation}
+  \tilde{L}_{abic} = L_{abic} - \sum_mt_m^a\tilde{L}_{mbic} - \sum_mt_m^b\left(L_{amic} + \sum_et_i^eL_{amec}\right) + \sum_et_i^eL_{abje}
+\end{equation}
+
+\begin{equation}
+  \tilde{L}_{abij} = L_{abij} + P_{ia,jb}\sum_et_i^e\left(\tilde{L}_{baje} - \frac{1}{2}\sum_ft_j^f\tilde{L}_{abef}\right) - P_{ia,jb}\sum_mt_m^a\left(L_{mbij} - \frac{1}{2}\sum_nt_n^bL_{mnij}\right)
+\end{equation}
+
+\subsection{Density-Fitting Tensors}
+
+\begin{equation}
+  \tilde{b}_{ia}^Q = b_{ia}^Q
+\end{equation}
+
+\begin{equation}
+  \tilde{b}_{ij}^Q = b_{ij}^Q + \sum_et_j^eb_{ie}^Q
+\end{equation}
+
+\begin{equation}
+  \tilde{b}_{ab}^Q = b_{ab}^Q - \sum_mt_m^ab_{mb}^Q
+\end{equation}
+
+\begin{equation}
+  \tilde{b}_{ai}^Q = b_{ai}^Q - \sum_mt_m^a\tilde{b}_{mi}^Q + \sum_et_i^eb_{ae}^Q
+\end{equation}
+
+\end{document}
