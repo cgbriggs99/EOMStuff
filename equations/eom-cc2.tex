@@ -1,0 +1,309 @@
+\documentclass{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{mathtools}
+
+\newcommand{\tei}[2]{\left<{#1}\middle|\middle|{#2}\right>}
+\newcommand{\ttau}{\tilde{\tau}}
+
+\begin{document}
+
+\section{Lambda Equations}
+
+The first step to getting the EOM equations is the lambda equations for the ground state. This way, we don't need to solve for these along side the other parameters.
+
+\begin{equation}
+  \frac{\partial L}{\partial t_i^a} = \left<\Phi_0\middle|\left[\tilde{H}_N, \hat{T}_2\right] + \tilde{H}_N\middle|\Phi_i^a\right> + \left<\Phi_0\middle|\hat{\Lambda}\left(\left[\tilde{F}_N, \hat{T}_2\right] + \tilde{H}_N\right)\middle|\Phi_i^a\right> - \lambda_i^a \left<\Phi_0\middle|\left[\tilde{F}_N, \hat{T}_2\right] + \tilde{H}_N\middle|\Phi_0\right> = 0
+\end{equation}
+
+\begin{equation}
+  \frac{\partial L}{\partial t_{ij}^{ab}} = \left<\Phi_0\middle|\left[\hat{F}_N, \hat{T}_2\right] + \tilde{H}_N\middle|\Phi_{ij}^{ab}\right> + \left<\Phi_0\middle|\hat{\Lambda}_1\left[\overline{H}, \tau_{ij}^{ab}\right]\middle|\Phi_0\right> + \left<\Phi_0\middle|\hat{\Lambda}\hat{F}_N\middle|\Phi_{ij}^{ab}\right> = 0
+\end{equation}
+
+This gives the following residual equations. Note that we need to include disconnected diagrams between the lambda and Hamiltonian terms, since they are not commuted.
+
+\begin{equation}
+  \widetilde{\tei{ij}{ab}} + P_{ij}\sum_e\lambda_e^i\widetilde{\tei{ej}{ab}} - P_{ab}\sum_m\lambda_a^m\widetilde{\tei{ij}{mb}} + \varepsilon_{ij}^{ab}\lambda_{ab}^{ij} + P_{ij}P_{ab}\lambda_a^i\tilde{f}_{jb} = 0
+\end{equation}
+
+\begin{multline}
+  \tilde{f}_{ia} + \sum_e\lambda_e^i\tilde{f}_{ea} - \sum_m\lambda_a^m\tilde{f}_{im} + \sum_{me}\lambda_e^n\widetilde{\tei{ie}{am}} + \frac{1}{2}\sum_{mef}\lambda_{ef}^{im}\widetilde{\tei{ef}{am}} - \frac{1}{2}\sum_{mne}\lambda_{ae}^{mn}\widetilde{\tei{ie}{mn}} + \sum_{mnef}\lambda_f^nt_{mn}^{ef}\widetilde{\tei{im}{ae}} \\
+  - \frac{1}{2}\sum_{mnef}\lambda_e^it_{mn}^{ef}\widetilde{\tei{mn}{af}} - \frac{1}{2}\sum_{mnef}\lambda_a^mt_{mn}^{ef}\widetilde{\tei{in}{ef}}= 0
+\end{multline}
+
+\subsection{Spin-integration}
+
+The spin-integrated equations are as follows.
+
+\begin{equation}
+  2\tilde{L}_{ijab} + 2P_{ia,jb}\sum_e\lambda_e^i\tilde{L}_{ejab} - 2P_{ia,jb}\sum_m\lambda_a^m\tilde{L}_{ijmb} + 2\varepsilon_{ij}^{ab}\left(2\lambda_{ab}^{ij} - \lambda_{ba}^{ij}\right) + 2P_{ia,jb}\left(2\lambda_a^i\tilde{f}_{jb} - \tilde{\lambda}_a^j\tilde{f}_{ib}\right) = 0
+\end{equation}
+
+\begin{multline}
+  2\tilde{f}_{ia} + 2\sum_e\lambda_e^i\tilde{f}_{ea} - 2\sum_m\lambda_a^m\tilde{f}_{im} + 2\sum_{me} \lambda_e^m\tilde{L}_{ieam} + 2\sum_{mef}\lambda_{ef}^{im}\widetilde{\left<ef\middle|am\right>}\\
+  - 2\sum_{mne}\lambda_{ae}^{mn} \widetilde{\left<ie\middle|mn\right>} + 2\sum_{mnef}\lambda_f^n\left(2t_{mn}^{ef} - t_{mn}^{fe}\right)\tilde{L}_{imae} - 2\sum_{mnef}\lambda_e^it_{mn}^{ef}\tilde{L}_{mnaf} - 2\sum_{mnef}\lambda_a^mt_{mn}^{ef}\tilde{L}_{inef}= 0
+\end{multline}
+
+\subsection{Alternative Spin-integration}
+We can alternatively split the biorthogonalization for the lambda equations. We will need to do this for EOM as well.
+
+\begin{equation}
+  2\widetilde{\left<ij\middle|ab\right>} + 2P_{ia,jb}\sum_e\lambda_e^i\widetilde{\left<ej\middle|ab\right>} - 2P_{ia,jb}\sum_m\lambda_a^m\widetilde{\left<ij\middle|mb\right>} + 2\varepsilon_{ij}^{ab}\lambda_{ab}^{ij} + 2P_{ia,jb}\lambda_a^i\tilde{f}_{jb} = 0
+\end{equation}
+
+\begin{multline}
+  2\tilde{f}_{ia} + 2\sum_e\lambda_e^i\tilde{f}_{ea} - 2\sum_m\lambda_a^m\tilde{f}_{im} + 2\sum_{me} \lambda_e^m\tilde{L}_{ieam} + 2\sum_{mef}\left(2\lambda_{ef}^{im} - \lambda_{fe}^{im}\right)\widetilde{\left<ef\middle|am\right>}\\
+  - 2\sum_{mne}\left(2\lambda_{ae}^{mn} - \lambda_{ea}^{mn}\right) \widetilde{\left<ie\middle|mn\right>} + 2\sum_{mnef}\lambda_f^n\left(2t_{mn}^{ef} - t_{mn}^{fe}\right)\tilde{L}_{imae} - 2\sum_{mnef}\lambda_e^it_{mn}^{ef}\tilde{L}_{mnaf} - 2\sum_{mnef}\lambda_a^mt_{mn}^{ef}\tilde{L}_{inef}= 0
+\end{multline}
+
+\subsection{Density-fitting}
+
+\begin{equation}
+  4\sum_Q\tilde{b}_{ia}^Q\tilde{b}_{jb}^Q - 2\sum_Q\tilde{b}_{ib}^Q\tilde{b}_{ja}^Q + 2\varepsilon_{ij}^{ab}\lambda_{ab}^{ij} = 0
+\end{equation}
+
+\begin{multline}
+  2\tilde{f}_{ia} + 2\sum_e\lambda_e^i\tilde{f}_{ea} - 2\sum_m\lambda_a^m\tilde{f}_{im} + \sum_{me}\left(2\lambda_{ae}^{im} - \lambda_{ea}^{im}\right)\tilde{f}_{em} + 4\sum_Q\tilde{b}_{ia}^Q\sum_{me}\lambda_e^m\tilde{b}_{em}^Q - 2\sum_{me}\lambda_e^m\sum_Q\tilde{b}_{im}^Q\tilde{b}_{ea}^Q \\
+  + 4\sum_{Qe}\tilde{b}_{ea}^Q\sum_{mf}\lambda_{ef}^{im}\tilde{b}_{fm}^Q - 2\sum_{fQ}\tilde{b}_{fa}^Q\sum_{me}\lambda_{ef}^{im}\tilde{b}_{em}^Q - 4\sum_{mQ}\tilde{b}_{im}^Q\sum_{ne}\lambda_{ae}^{mn}\tilde{b}_{en}^Q + 2\sum_{nQ}\tilde{b}_{in}^Q\sum_{me}\lambda_{ae}^{mn}\tilde{b}_{em}^Q = 0
+\end{multline}
+
+\section{One-particle reduced density matrix}
+
+The one-particle reduced density matrix in the $T_1$ transformation formalism is as follows.
+
+\begin{equation}
+  \tilde{\rho}_{ij} = \delta_{ij} - \frac{1}{2}\sum_{mef}\lambda_{ef}^{jm}t_{im}^{ef}
+\end{equation}
+
+\begin{equation}
+  \tilde{\rho}_{ab} = \frac{1}{2}\sum_{mne}\lambda_{ae}^{mn}t_{mn}^{be}
+\end{equation}
+
+\begin{equation}
+  \tilde{\rho}_{ai} = \sum_{me}\lambda_e^mt_{im}^{ae}
+\end{equation}
+
+\begin{equation}
+  \tilde{\rho}_{ia} = \lambda_a^i
+\end{equation}
+
+The $T_1$ transformed property matrix has the following form.
+
+\begin{equation}
+  \tilde{\theta}_{ij} = \left(1 - \delta_{ij}\right)\theta_{ij} + \sum_et_j^e\theta_{ie}
+\end{equation}
+\begin{equation}
+  \tilde{\theta}_{ab} = \left(1 - \delta_{ab}\right)\theta_{ab} - \sum_mt_m^a\theta_{mb}
+\end{equation}
+\begin{equation}
+  \tilde{\theta}_{ia} = \theta_{ia}
+\end{equation}
+\begin{equation}
+  \tilde{\theta}_{ai} = \theta_{ai} + \sum_et_i^e\tilde{\theta}_{ae} - \sum_mt_m^a\theta_{mi}
+\end{equation}
+
+The property can then be found as $\theta = \mathrm{Tr}\left(\tilde{\rho}\tilde{\theta}\right) = \sum_{pq}\tilde{\rho}_{pq}\tilde{\theta}_{pq}$. Alternatively, we can untransform the equations to get the following. Note that the signs are not as expected, due to the fact that we need to do an inverse $T_1$ transform.
+
+\begin{equation}
+  \rho_{ij} = \tilde{\rho}_{ij} - \delta_{ij} - \sum_et_i^e\tilde{\rho}_{je}
+\end{equation}
+
+\begin{equation}
+  \rho_{ab} = \tilde{\rho}_{ab} + \sum_mt_m^b\tilde{\rho}_{ma}
+\end{equation}
+
+\begin{equation}
+  \rho_{ai} = \tilde{\rho}_{ai} - \sum_et_i^e\rho_{ea} + \sum_mt_m^a\tilde{\rho}_{im}
+\end{equation}
+
+\begin{equation}
+  \rho_{ia} = \tilde{\rho}_{ia}
+\end{equation}
+
+\subsection{Spin integration}
+
+\begin{equation}
+  \rho_{ij} = -2\sum_e\lambda_e^jt_i^e - 2\sum_{mef}\left(2\lambda_{ef}^{jm} - \lambda_{fe}^{jm}\right)t_{im}^{ef}
+\end{equation}
+
+\begin{equation}
+  \rho_{ab} = 2\sum_m\lambda_a^mt_m^b + 2\sum_{mne}\left(2\lambda_{ae}^{mn} - \lambda_{ea}^{mn}\right)t_{mn}^{be}
+\end{equation}
+
+\begin{equation}
+  \rho_{ai} = 2t_i^a + 2\sum_{me}\lambda_e^m\left(2t_{im}^{ae} - t_{im}^{ea}\right) - 2\sum_{me}\lambda_e^mt_i^et_m^a - 2\sum_{mnef}\lambda_{ef}^{mn}t_i^et_{mn}^{af} - 2\sum_{mnef}\lambda_{ef}^{mn}t_m^at_{in}^{ef}
+\end{equation}
+
+\begin{equation}
+  \rho_{ia} = 2\lambda_a^i
+\end{equation}
+
+\subsection{Alternative Spin-integration}
+
+\begin{equation}
+  \tilde{\rho}_{ij} = 2\delta_{ij} - 2\sum_{mef}\left(2\lambda_{ef}^{jm} - \lambda_{fe}^{jm}\right)t_{im}^{ef}
+\end{equation}
+
+\begin{equation}
+  \tilde{\rho}_{ab} = 2\sum_{mne}\left(2\lambda_{ae}^{mn} - \lambda_{ea}^{mn}\right)t_{mn}^{be}
+\end{equation}
+
+\begin{equation}
+  \tilde{\rho}_{ia} = 2\lambda_a^i
+\end{equation}
+
+\begin{equation}
+  \tilde{\rho}_{ai} = 2\sum_{me}\lambda_e^m\left(2t_{im}^{ae} - t_{im}^{ea}\right)
+\end{equation}
+
+\begin{equation}
+  \rho_{ij} = -2\sum_{mef}\left(2\lambda_{ef}^{jm} - \lambda_{fe}^{jm}\right)t_{im}^{ef} - 2\sum_et_i^e\lambda_e^j
+\end{equation}
+
+\begin{equation}
+  \rho_{ab} = 2\sum_{mne}\left(2\lambda_{ae}^{mn} - \lambda_{ea}^{mn}\right)t_{mn}^{be} + 2\sum_mt_m^b\lambda_a^m
+\end{equation}
+
+\begin{equation}
+  \rho_{ai} = 2\sum_{me}\lambda_e^m\left(2t_{im}^{ae} - t_{im}^{ea}\right) - 2\sum_{mnef}\left(2\lambda_{ef}^{mn} - \lambda_{fe}^{mn}\right)t_i^et_{mn}^{af} - 2\sum_{me}\lambda_e^mt_i^et_m^a + 2t_i^a - 2\sum_{mnef}\left(2\lambda_{ef}^{mn} - \lambda_{fe}^{mn}\right)t_m^at_{in}^{ef}
+\end{equation}
+
+\begin{equation}
+  \rho_{ia} = 2\lambda_a^i
+\end{equation}
+
+\section{Right Products}
+
+For the ground state, $r_0 = 1$ and $r_\mu = 0$. For excited states, all amplitudes need to be solved. 
+
+\begin{equation}
+  \sum_{ia}r_i^a\tilde{f}_{ia} + \frac{1}{4}\sum_{ijab}r_{ij}^{ab}\tilde{\tei{ij}{ab}} = \omega r_0
+\end{equation}
+
+\begin{multline}
+  \omega r_i^a = \sum_er_i^e\tilde{f}_{ae} - \sum_mr_m^a\tilde{f}_{mi} - \frac{1}{2}\sum_{mnef}r_i^et_{mn}^{af}\widetilde{\tei{mn}{ef}} - \frac{1}{2}\sum_{mnef}r_m^at_{in}^{ef}\widetilde{\tei{mn}{ef}} + \sum_{mnef}r_n^ft_{im}^{ae}\widetilde{\tei{mn}{ef}}\\
+  + \sum_{me}r_{im}^{ae}\tilde{f}_{me} + \frac{1}{2}\sum_{mef}r_{im}^{ef}\widetilde{\tei{am}{ef}} - \frac{1}{2}\sum_{mne}r_{mn}^{ae}\widetilde{\tei{mn}{ie}} + \sum_{me}r_m^e\widetilde{\tei{am}{ie}}
+\end{multline}
+
+\begin{equation}
+  \omega r_{ij}^{ab} = \varepsilon_{ij}^{ab}r_{ij}^{ab} + P_{ij}\sum_er_i^e\widetilde{\tei{ab}{ej}} - P_{ab}\sum_mr_m^a\widetilde{\tei{mb}{ij}}
+\end{equation}
+
+\subsection{Spin-integration}
+
+\begin{equation}
+  2\sum_{ia}r_i^a\tilde{f}_{ia} + \sum_{ijab}r_{ij}^{ab}\tilde{L}_{ijab} = \omega r_0
+\end{equation}
+
+\begin{multline}
+  2\omega r_{i}^{a} = 2\sum_er_i^e\tilde{f}_{ea} - 2\sum_mr_m^a\tilde{f}_{mi} + 2\sum_{me}r_m^e\tilde{L}_{amie} + 2\sum_{mnef}r_n^f\left(2t_{im}^{ae} - t_{im}^{ea}\right)\tilde{L}_{mnef} + 2\sum_{me}r_{im}^{ae}\tilde{f}_{me}\\
+  - 2\sum_{mnef}r_i^et_{mn}^{af}\tilde{L}_{mnef} - 2\sum_{mnef}r_m^at_{in}^{ef}\tilde{L}_{mnef} + 2\sum_{mef}r_{im}^{ef}\tilde{L}_{amef} - 2\sum_{mne} r_{mn}^{ae}\tilde{L}_{mnie}
+\end{multline}
+
+\begin{equation}
+  2\omega r_{ij}^{ab} = 2\varepsilon_{ij}^{ab}r_{ij}^{ab} + 2P_{ia,jb}\sum_er_i^e\widetilde{\left<ab\middle|ej\right>} - 2P_{ia,jb}\sum_mr_m^a\widetilde{\left<mb\middle|ij\right>}
+\end{equation}
+
+Let's find the singles-singles block as well.
+
+\begin{equation}
+  H_{ia,jb} = 2\delta_{ij}\tilde{f}_{ba} - 2\delta_{ab}\tilde{f}_{ji} + 2\tilde{L}_{ajib} + 2\sum_{me}\left(2t_{im}^{ae} - t_{im}^{ea}\right)\tilde{L}_{mjeb} - 2\delta_{ij}\sum_{mne}t_{mn}^{ae}\tilde{L}_{mnbe} - 2\delta_{ab}\sum_{mef}t_{im}^{ef}\tilde{L}_{jmef}
+\end{equation}
+
+And the diagonal elements.
+
+\begin{equation}
+  H_{ia,ia} = 2\tilde{f}_{aa} - 2\tilde{f}_{ii} + 2\tilde{L}_{aiia} + 2\sum_{me}\left(2t_{im}^{ae} - t_{im}^{ea}\right)\tilde{L}_{miea} - 2\sum_{mne}t_{mn}^{ae}\tilde{L}_{mnae} - 2\sum_{mef}t_{im}^{ef}\tilde{L}_{imef}
+\end{equation}
+
+\begin{equation}
+  H_{ijab,ijab} = 2\varepsilon_{ij}^{ab}
+\end{equation}
+
+\section{Left Products}
+
+Similar to the right products, for the ground state, $l_0 = 1$, and overall $\hat{L} = 1 + \hat{\Lambda}$. For excited states, $l_0 = 0$. Also, unlike for the right-hand case, the left-hand case is allowed to have disconnected diagrams because the left-hand multiplication is not done with a commutator.
+
+\begin{multline}
+  \omega l_a^i = \sum_el_e^i\tilde{f}_{ea} - \sum_ml_a^m\tilde{f}_{im} + \sum_{me}l_e^m\widetilde{\tei{ie}{am}} - \frac{1}{2}\sum_{mnef}l_a^mt_{mn}^{ef}\widetilde{\tei{in}{ef}} - \frac{1}{2}\sum_{mnef}l_e^it_{mn}^{ef}\widetilde{\tei{mn}{af}}\\
+  + \frac{1}{2}\sum_{mef}l_{ef}^{im}\widetilde{\tei{ef}{am}} - \frac{1}{2}\sum_{mne}l_{ae}^{mn}\widetilde{\tei{ie}{mn}} + \sum_{mnef}l_f^nt_{mn}^{ef}\widetilde{\tei{im}{ae}}
+\end{multline}
+
+\begin{equation}
+  \omega l_{ab}^{ij} = P_{ij}\sum_el_e^i\widetilde{\tei{ej}{ab}} - P_{ab}\sum_ml_a^m\widetilde{\tei{ij}{mb}} + \varepsilon_{ij}^{ab}l_{ab}^{ij} + P_{ij}P_{ab}l_a^i\tilde{f}_{jb}
+\end{equation}
+
+\subsection{Spin-integrated}
+
+\begin{multline}
+  2\omega l_a^i = 2\sum_el_e^i\tilde{f}_{ea} - 2\sum_ml_a^m\tilde{f}_{im} + 2\sum_{me}l_i^m\tilde{L}_{ieam} - 2\sum_{mnef}l_a^mt_{mn}^{ef}\tilde{L}_{inef} - 2\sum_{mnef}l_e^it_{mn}^{ef}\tilde{L}_{mnaf}\\
+  + 2\sum_{mef}l_{ef}^{im}\widetilde{\left<ef\middle|am\right>} - 2\sum_{mne}l_{ae}^{mn}\widetilde{\left<ie\middle|mn\right>} + 2\sum_{mnef}l_f^n\left(2t_{mn}^{ef} - t_{mn}^{fe}\right)\tilde{L}_{imae}
+\end{multline}
+
+\begin{equation}
+  2\omega \left(2l_{ab}^{ij} - l_{ba}^{ij}\right) = 2P_{ia,jb}\sum_el_e^i\tilde{L}_{ejab} - 2P_{ia,jb}\sum_ml_a^m\tilde{L}_{ijmb} + 2\varepsilon_{ij}^{ab}\left(2l_{ab}^{ij}  - l_{ba}^{ij}\right)+ 2P_{ia,jb}\left(2l_a^i\tilde{f}_{jb} - l_b^i\tilde{f}_{ja}\right)
+\end{equation}
+
+That won't work, so we need to fix it.
+
+\begin{equation}
+  \frac{2}{3}\omega\left(4l_{ab}^{ij} - 2l_{ba}^{ij} + 2l_{ba}^{ij} - l_{ab}^{ij}\right) = 2\omega l_{ab}^{ij}
+\end{equation}
+
+\begin{multline}
+  6\omega l_{ab}^{ij} = 2P_{ia,jb}\sum_el_e^i\left(2\tilde{L}_{ejab} + \tilde{L}_{ejba}\right) - 2P_{ia,jb}\sum_ml_a^m\left(2\tilde{L}_{ijmb} + \tilde{L}_{jimb}\right) + 2\varepsilon_{ij}^{ba}\left(4l_{ab}^{ij}  - 2l_{ba}^{ij} + 2l_{ba}^{ij} - l_{ab}^{ij}\right)\\
+  + 2P_{ia,jb}\left(4l_a^i\tilde{f}_{jb} - 2l_b^i\tilde{f}_{ja} + 2l_b^i\tilde{f}_{ja} - l_a^i\tilde{f}_{jb}\right)
+\end{multline}
+
+\begin{equation}
+  2\omega l_{ab}^{ij} = 2P_{ia,jb}\sum_el_e^i\widetilde{\left<ej\middle|ab\right>} - 2P_{ia,jb}\sum_ml_a^m\widetilde{\left<ij\middle|mb\right>} + 2\varepsilon_{ij}^{ab}l_{ab}^{ij} + 2P_{ia,jb}l_a^i\tilde{f}_{jb}
+\end{equation}
+
+\begin{multline}
+  2\omega l_a^i = 2\sum_el_e^i\tilde{f}_{ea} - 2\sum_ml_a^m\tilde{f}_{im} + 2\sum_{me}l_e^m\tilde{L}_{ieam} - 2\sum_{mnef}l_a^mt_{mn}^{ef}\tilde{L}_{inef} - 2\sum_{mnef}l_e^it_{mn}^{ef}\tilde{L}_{mnaf}\\
+  + 2\sum_{mef}\left(2l_{ef}^{im} - l_{fe}^{im}\right)\widetilde{\left<ef\middle|am\right>} - 2\sum_{mne}\left(2l_{ae}^{mn} - l_{ea}^{mn}\right)\widetilde{\left<ie\middle|mn\right>} + 2\sum_{mnef}l_f^n\left(2t_{mn}^{ef} - t_{mn}^{fe}\right)\tilde{L}_{imae}
+\end{multline}
+
+\section{Dot products}
+The dot product between two vectors is as follows. Note that these expressions are independent on whether the two vectors are from the same state, meaning these can be used to orthonormalize the basis of states.
+
+\begin{equation}
+  \left<\Phi_0\middle|\hat{L}\hat{R}\middle|\Phi_0\right> = \sum_{ia}l_a^ir_i^a + \frac{1}{4}\sum_{ijab}l_{ab}^{ij}r_{ij}^{ab}
+\end{equation}
+
+\begin{equation}
+  \left<\Phi_0\middle|\left(1 + \hat{\Lambda}\right)\hat{R}\middle|\Phi_0\right> = r_0 + \sum_{ia}\lambda_a^ir_i^a + \frac{1}{4}\sum_{ijab}\lambda_{ab}^{ij}r_{ij}^{ab}
+\end{equation}
+
+\begin{equation}
+  \left<\Phi_0\middle|\hat{R}^\dagger\hat{R}\middle|\Phi_0\right> = \left|r_0\right|^2 + \sum_{ia}\left|r_i^a\right|^2 + \frac{1}{4} \sum_{ijab}\left|r_{ij}^{ab}\right|^2
+\end{equation}
+
+\begin{equation}
+  \left<\Phi_0\middle|\hat{L}\hat{L}^\dagger\middle|\Phi_0\right> = \sum_{ia}\left|l_a^i\right|^2 + \frac{1}{4}\sum_{ijab}\left|l_{ab}^{ij}\right|^2
+\end{equation}
+
+\subsection{Spin-integration}
+
+The transformation matrix from the manifold of left-excitations to the spin-adapted left-excitations is baked into the $\hat{L}$ operator, so it only needs to be considered for the same-vector dot products. It will be denoted $\hat{U}$.
+
+\begin{equation}
+  \left<\Phi_0\middle|\hat{L}\hat{R}\middle|\Phi_0\right> = 2\sum_{ia}l_a^ir_i^a + 2\sum_{ijab}l_{ab}^{ij}r_{ij}^{ab}
+\end{equation}
+
+\begin{equation}
+  \left<\Phi_0\middle|\left(1 + \hat{\Lambda}\right)\hat{R}\middle|\Phi_0\right> = r_0 + 2\sum_{ia}\lambda_a^ir_i^a + 2\sum_{ijab}\lambda_{ab}^{ij}r_{ij}^{ab}
+\end{equation}
+
+\begin{equation}
+  \left<\Phi_0\middle|\hat{R}^\dagger\hat{U}\hat{R}\middle|\Phi_0\right> = \left|r_0\right|^2 + 2\sum_{ia}\left|r_i^a\right|^2 + 2\sum_{ijab}\left|r_{ij}^{ab}\right|^2
+\end{equation}
+
+\begin{equation}
+  \left<\Phi_0\middle|\hat{L}\hat{U}^{-1}\hat{L}^\dagger\middle|\Phi_0\right> = 2\sum_{ia}\left|l_a^i\right|^2 + 2\sum_{ijab}\left|l_{ab}^{ij}\right|^2
+\end{equation}
+
+\end{document}

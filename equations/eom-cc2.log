@@ -1,7 +1,7 @@
-This is LuaHBTeX, Version 1.18.0 (TeX Live 2025/dev/Debian)  (format=lualatex 2025.10.20)  14 MAY 2026 19:49
+This is LuaHBTeX, Version 1.18.0 (TeX Live 2025/dev/Debian)  (format=lualatex 2025.10.20)  15 MAY 2026 18:39
  restricted system commands enabled.
-**cc2.tex
-(./cc2.tex
+**eom-cc2.tex
+(./eom-cc2.tex
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
 Lua module: luaotfload 2024-12-03 v3.29 Lua based OpenType font support
@@ -220,8 +220,8 @@ File: l3backend-luatex.def 2024-05-08 L3 backend support: PDF output (LuaTeX)
 Inserting `l3color' in `luaotfload.parse_color'.
 \l__pdf_internal_box=\box55
 )
-(./cc2.aux)
-\openout1 = cc2.aux
+(./eom-cc2.aux)
+\openout1 = eom-cc2.aux
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 12.
 LaTeX Font Info:    ... okay on input line 12.
@@ -308,17 +308,18 @@ LaTeX Font Info:    Trying to load font information for U+msb on input line 18.
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
+Overfull \hbox (3.70447pt too wide) detected at line 60
+ []$[] \OMS/cmsy/m/n/10 ^^@ \OT1/cmr/m/n/10 2 [] [] [] + 2 [] \OML/cmm/m/it/10 
+[] [] [] \OMS/cmsy/m/n/10 ^^@ \OT1/cmr/m/n/10 2 [] \OML/cmm/m/it/10 []t[][] \
+OMS/cmsy/m/n/10 ^^@ \OT1/cmr/m/n/10 2 [] \OML/cmm/m/it/10 []t[][] \OT1/cmr/m/n
+/10 = 0$ []  
+ []
+
+
 
 [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-Overfull \hbox (1.45528pt too wide) detected at line 136
-[]\OML/cmm/m/it/10 R[] \OT1/cmr/m/n/10 = 2[] + [] [] [] + 2 [] [] \OML/cmm/m/it
-/10 t[] [] [] \OMS/cmsy/m/n/10 ^^@ \OT1/cmr/m/n/10 2 [] [] \OML/cmm/m/it/10 t[]
- [] []
- []
-
-
 
 [2]
 
@@ -326,7 +327,7 @@ Overfull \hbox (1.45528pt too wide) detected at line 136
 
 [4]
 
-[5] (./cc2.aux)
+[5] (./eom-cc2.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
@@ -334,29 +335,28 @@ L3 programming layer <2025-01-18>
 )
 
 Here is how much of LuaTeX's memory you used:
- 3770 strings out of 475512
+ 3765 strings out of 475512
  100000,662416 words of node,token memory allocated
- 1000 words of node memory still in use:
-   6 hlist, 2 vlist, 2 rule, 2 glue, 4 kern, 1 glyph, 130 attribute, 56 glue_spe
-c, 130 attribute_list, 1 write nodes
-   avail lists: 2:599,3:175,4:22,5:772,6:46,7:5154,8:93,9:1623,10:5,11:296
- 26745 multiletter control sequences out of 65536+600000
- 44 fonts using 2870543 bytes
- 57i,6n,62p,844b,141s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/share/texmf/fonts/opentype/public/lm/lmroman10-bold.otf></usr/share/texmf/
-fonts/opentype/public/lm/lmroman10-regular.otf></usr/share/texmf/fonts/opentype/
-public/lm/lmroman12-bold.otf></usr/share/texlive/texmf-dist/fonts/type1/public/a
-msfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
-/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmm
-i12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb>
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/sh
-are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texli
-ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb>
-Output written on cc2.pdf (5 pages, 120087 bytes).
+ 896 words of node memory still in use:
+   6 hlist, 2 vlist, 2 rule, 2 glue, 4 kern, 1 glyph, 104 attribute, 56 glue_spe
+c, 104 attribute_list, 1 write nodes
+   avail lists: 2:975,3:179,4:20,5:772,6:37,7:4347,8:110,9:2015,10:4,11:73
+ 26740 multiletter control sequences out of 65536+600000
+ 37 fonts using 2366671 bytes
+ 57i,10n,62p,373b,141s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/share/texmf/fonts/opentype/public/lm/lmroman10-regular.otf></usr/share/tex
+mf/fonts/opentype/public/lm/lmroman12-bold.otf></usr/share/texlive/texmf-dist/fo
+nts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/typ
+e1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/publ
+ic/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfo
+nts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb
+></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/s
+hare/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on eom-cc2.pdf (5 pages, 109849 bytes).
 
-PDF statistics: 73 PDF objects out of 1000 (max. 8388607)
- 48 compressed objects within 1 object stream
+PDF statistics: 66 PDF objects out of 1000 (max. 8388607)
+ 44 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 131072)
  1 words of extra memory for PDF output out of 10000 (max. 100000000)
 
