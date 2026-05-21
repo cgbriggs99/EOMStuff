@@ -11,167 +11,444 @@
 
 \begin{document}
 
-\section{Matrix Elements}
+\section{CCSD Equations}
 
-Define the following matrix elements to make things go easier.
+Start with the $T_1$-transformed equations.
 
 \begin{equation}
-  \tau_{ij}^{ab} = t_{ij}^{ab} + t_i^at_j^b - t_i^bt_j^a
+  E_{CCSD} = \sum_{ia}t_{ia}f_{ia} + \frac{1}{4}\sum_{ijab}t_{ij}^{ab}\tei{ij}{ab} + \frac{1}{2}\sum_{ijab}t_i^at_j^b\tei{ij}{ab}
 \end{equation}
 
 \begin{equation}
-  \tilde{\tau}_{ij}^{ab} = \frac{1}{2}t_{ij}^{ab} + t_i^at_j^b
-\end{equation}
-
-\subsection{One Particle}
-
-\begin{equation}
-  \overline{H}_1 = \sum_{pq} F_{pq} N\left[\hat{a}_p^\dagger\hat{a}_q\right]
+  R_i^a = \tilde{f}_{ai} + \sum_{me}t_{im}^{ae}\tilde{f}_{me} + \frac{1}{2}\sum_{mef}t_{im}^{ef}\widetilde{\tei{am}{ef}} - \frac{1}{2}\sum_{mne}t_{mn}^{ae}\widetilde{\tei{mn}{ie}}
 \end{equation}
 
 \begin{equation}
-  F_{ij} = f_{ij} + \sum_a t_j^a f_{ia} + \sum_{ka}t_k^a \tei{ki}{aj} + \frac{1}{2}\sum_{kab} \tau_{kj}^{ba}\tei{ki}{ba}
+  R_{ij}^{ab} = \widetilde{\tei{ab}{ij}} + P_{ab}^-\sum_et_{ij}^{ae}F_{be} - P_{ij}^-\sum_mt_{im}^{ab}F_{mj} + \frac{1}{2}\sum_{mn}t_{mn}^{ab}W_{mnij} + \frac{1}{2}\sum_{ef}t_{ij}^{ef}\widetilde{\tei{ab}{ef}} + P_{ij}^-P_{ab}^-\sum_{me}t_{im}^{ae}W_{mbej}
+\end{equation}
+
+The intermediates are as follows.
+
+\begin{equation}
+  F_{be} = \tilde{f}_{be} - \frac{1}{2}\sum_{mnf}t_{mn}^{bf}\widetilde{\tei{mn}{ef}}
 \end{equation}
 
 \begin{equation}
-  F_{ab} = f_{ab} - \sum_i t_i^a f_{ib} + \sum_{ic} t_i^c \tei{ia}{cb} - \frac{1}{2}\sum_{ijc}\tau_{ij}^{ca} \tei{ij}{cb}
+  F_{mj} = \tilde{f}_{mj} + \frac{1}{2}\sum_{nef} t_{jn}^{ef}\widetilde{\tei{mn}{ef}}
 \end{equation}
 
 \begin{equation}
-  F_{ia} = f_{ia} - \sum_{jb}t_j^b \tei{ij}{ab}
-\end{equation}
-
-Note that $F_{ai}$ is the expression for the $T_1$ residual. At convergence of CCSD, this residual is zero.
-
-\begin{equation}
-  F_{ai} = 0
-\end{equation}
-
-\subsection{Two Particle}
-
-\begin{equation}
-  \overline{H}_2 = \sum_{pqrs} W_{pqrs}N\left[\hat{a}_p^\dagger\hat{a}_q^\dagger\hat{a}_s\hat{a}_r\right]
+  W_{mnij} = \widetilde{\tei{mn}{ij}} + \frac{1}{2}\sum_{ef}t_{mn}^{ef}\widetilde{\tei{mn}{ef}}
 \end{equation}
 
 \begin{equation}
-  W_{ijkl} = \tei{ij}{kl} + P_{kl}^-\sum_a t_k^a\tei{ij}{al} + \frac{1}{2}\sum_{ab}\tau_{kl}^{ab}\tei{ij}{ab}
+  W_{mbej} = \widetilde{\tei{mb}{ej}}  + \frac{1}{2}\sum_{nf}t_{nj}^{fb}\widetilde{\tei{mn}{ef}}
+\end{equation}
+
+\subsection{Spin-integrated}
+
+\begin{equation}
+  E_{CCSD} = 2\sum_{ia}t_i^af_{ia} + \sum_{ijab}t_{ij}^{ab}L_{ijab} + \sum_{ijab}t_i^at_j^bL_{ijab}
 \end{equation}
 
 \begin{equation}
-  W_{iajb} = \tei{ia}{jb} - \sum_kt_k^a\tei{ik}{jb} + \sum_ct_j^c\tei{ia}{cb} - \sum_{kc}\left(t_{jk}^{ca} + t_j^ct_k^a\right)\tei{ik}{cb}
-\end{equation}
-
-\begin{equation}
-  W_{abcd} = \tei{ab}{cd} - P_{ab}^-\sum_kt_k^a\tei{kb}{cd} + \frac{1}{2}\sum_{kl}\tau_{kl}^{ab}\tei{kl}{cd}
+  R_i^a = 2\tilde{f}_{ai} + 2\sum_{me}\left(2t_{im}^{ae} - t_{im}^{ea}\right)\tilde{f}_{me} + 2\sum_{mef}t_{im}^{ef}\tilde{L}_{amef} - 2\sum_{mne}t_{mn}^{ae}\tilde{L}_{mnie}
 \end{equation}
 
 \begin{multline}
-  W_{iajk} = \tei{ia}{jk} + \sum_b t_{jk}^{ba}f_{ib} - \sum_lt_l^a\tei{li}{jk} + P^-_{jk}\sum_b t_k^b\tei{ia}{jb} - P^-_{jk}\sum_{lb}t_k^bt_l^a\tei{li}{bj} \\
-  + \frac{1}{2}P_{jk}^-\sum_{bc}t_j^bt_k^c\tei{ia}{bc} - \frac{1}{2}P_{jk}^-\sum_{lbc}t_j^bt_k^ct_l^a\tei{il}{bc} + P_{jk}^-\sum_{lb}t_{kl}^{ab}\tei{li}{bj} + \frac{1}{2}\sum_{bc}t_{jk}^{bc}\tei{ia}{bc} + P_{jk}^-\sum_{lbc}t_{lk}^{ca}t_j^b\tei{il}{bc}\\
-  - \frac{1}{2}\sum_{lbc}t_{jk}^{bc}t_l^a\tei{li}{bc} + \sum_{lbc}t_{jk}^{ac}t_l^b\tei{li}{bc}
+  R_{ij}^{ab} = 2\widetilde{\left<ab\middle|ij\right>} + 2P_{ia,jb}\sum_et_{ij}^{ae}F_{be} - 2P_{ia,jb}\sum_mt_{im}^{ab}F_{mj} + 2\sum_{mn}t_{mn}^{ab}W_{mnij} + 2\sum_{ef}t_{ij}^{ef}\widetilde{\left<ab\middle|ef\right>} \\
+  + 2P_{ia,jb}\sum_{me}\left(2t_{im}^{ae} - t_{im}^{ea}\right)W_{mbej} - P_{ia,jb}\sum_{me}t_{im}^{ea}W_{mbje} - 2P_{ia,jb}\sum_{me}t_{im}^{eb}W_{maje}
 \end{multline}
 
-Simplify.
+\begin{equation}
+  F_{be} = \tilde{f}_{be} - \sum_{mnf}t_{mn}^{bf}\tilde{L}_{mnef}
+\end{equation}
+
+\begin{equation}
+  F_{mj} = \tilde{f}_{mj} + \sum_{nef} t_{jn}^{ef}\tilde{L}_{mnef}
+\end{equation}
+
+\begin{equation}
+  W_{mnij} = \widetilde{\left<mn\middle|ij\right>} + \sum_{ef}t_{mn}^{ef}\widetilde{\left<mn\middle|ef\right>}
+\end{equation}
+
+\begin{equation}
+  W_{mbej} = \tilde{L}_{mbej} + \frac{1}{2}\sum_{nf}\left(2t_{nj}^{fb} - t_{nj}^{bf}\right)\tilde{L}_{mnef}
+\end{equation}
+
+\begin{equation}
+  W_{mbje} = \widetilde{\left<mb\middle|je\right>} - \frac{1}{2} \sum_{nf}t_{jn}^{bf}\widetilde{\left<mn\middle|ef\right>}
+\end{equation}
+
+\section{Lambda CCSD}
 
 \begin{multline}
-  W_{iajk} = \tei{ia}{jk} + \sum_b t_{jk}^{ba}F_{ib} - \sum_lt_l^aW_{lijk} - P^-_{jk}\sum_c t_j^c\left(\tei{ia}{kc} - \sum_{lb} t_{kl}^{ab}\tei{li}{bc}\right)\\
-  + \frac{1}{2}\sum_{bc}\tau_{jk}^{bc}\tei{ia}{bc} + P_{jk}^-\sum_{lb}t_{kl}^{ab}\tei{li}{bj}
+  R_a^i = \tilde{f}_{ia} - \sum_m\lambda_a^mF_{im} + \sum_e\lambda_e^iF_{ea} + \sum_{me}\lambda_e^mW_{eima} + \frac{1}{2}\sum_{mef}\lambda_{ef}^{im}W_{efam} - \frac{1}{2}\sum_{mne}\lambda_{ae}^{mn}W_{iemn}\\
+  - \frac{1}{2}\sum_{mn}G_{mn}\widetilde{\tei{in}{am}} + \frac{1}{2}\sum_{ef}G_{ef}\widetilde{\tei{ie}{af}}
 \end{multline}
 
 \begin{multline}
-  W_{abic} = \tei{ab}{ic} - \sum_mt_{mi}^{ab}f_{mc} + \sum_et_i^e\tei{ab}{ec} - P_{ab}^-\sum_m t_m^a\tei{mb}{ic} - P_{ab}^-\sum_{me} t_m^bt_i^e\tei{ma}{ce}\\
-  + \frac{1}{2}P_{ab}^-\sum_{mn} t_m^at_n^b\tei{mn}{ci} + \frac{1}{2}P_{ab}^-\sum_{me}t_m^bt_i^et_n^a\tei{mn}{ce} + \frac{1}{2}\sum_{mn}t_{mn}^{ab}\tei{mn}{ci} - P_{ab}^-\sum_{me}t_{im}^{ae}\tei{mb}{ec}\\
-  + \frac{1}{2}\sum_{mne}t_{mn}^{ab}t_i^e\tei{mn}{ec} + \sum_{mne}t_{ni}^{ba}t_m^e\tei{mn}{ec} + P_{ab}^-\sum_{mne}t_{ni}^{ea}t_m^b\tei{mn}{ec}
+  R_{ab}^{ij} = \widetilde{\tei{ij}{ab}} + P_{ij}^-P_{ab}^-\lambda_a^i\tilde{f}_{jb} + P_{ij}^-\sum_e\lambda_e^i\widetilde{\tei{ej}{ab}} - P_{ab}^-\sum_m\lambda_a^m\widetilde{\tei{ij}{mb}} + P_{ab}^-\sum_e\lambda_{ae}^{ij}F_{eb} - P_{ij}^-\sum_m\lambda_{ab}^{im}F_{jm} \\
+  + \frac{1}{2}\sum_{ef}\lambda_{ef}^{ij}W_{efab} + \frac{1}{2}\sum_{mn}\lambda_{ab}^{mn}W_{ijmn} + P_{ij}^-P_{ab}^-\sum_{me}\lambda_{ae}^{im}W_{ejmb} - \frac{1}{2}P_{ab}^-\sum_eG_{be}\widetilde{\tei{ij}{ae}} - \frac{1}{2}P_{ij}^-\sum_mG_{jm}\widetilde{\tei{im}{ab}}
 \end{multline}
 
-Simplify.
+\begin{equation}
+  W_{eima} = \widetilde{\tei{ei}{ma}} + \sum_{nf}t_{mn}^{ef}\widetilde{\tei{in}{af}}
+\end{equation}
+
+\begin{equation}
+  W_{efam} = \widetilde{\tei{ef}{am}} - \sum_nt_{mn}^{fe}\tilde{f}_{na}
+\end{equation}
+
+\begin{equation}
+  W_{iemn} = \widetilde{\tei{ie}{mn}} + \sum_ft_{mn}^{fe}\tilde{f}_{if}
+\end{equation}
+
+\begin{equation}
+  G_{mn} = \sum_{kef} \lambda_{ef}^{mk}t_{nk}^{ef}
+\end{equation}
+
+\begin{equation}
+  G_{ef} = \sum_{mnc} \lambda_{ec}^{mn}t_{mn}^{fc}
+\end{equation}
+
+\begin{equation}
+  W_{efab} = \widetilde{\tei{ef}{ab}} + \frac{1}{2}\sum_{mn}t_{mn}^{ef}\widetilde{\tei{mn}{ab}}
+\end{equation}
+
+\subsection{Spin integration}
 
 \begin{multline}
-  W_{abic} = \tei{ab}{ic} - \sum_mt_{mi}^{ab}F_{mc} + \sum_et_i^eW_{abec} - P_{ab}^-\sum_m t_m^a\left(\tei{mb}{ic} + \sum_{ne}t_{ni}^{eb}\tei{mn}{ec}\right) \\
-  + \frac{1}{2}\sum_{mn} \tau_{mn}^{ab}\tei{mn}{ci} - P_{ab}^-\sum_{me}t_{im}^{ae}\tei{mb}{ec}
+  R_a^i = 2\tilde{f}_{ia} - 2\sum_m\lambda_a^mF_{im} + 2\sum_e\lambda_e^iF_{ea} + 2\sum_{me}\lambda_e^mW_{eima} + 2\sum_{mef}\lambda_{ef}^{im}W_{efam} - 2\sum_{mne}\lambda_{ae}^{mn}W_{iemn}\\
+  - 2\sum_{mn}G_{mn}\tilde{L}_{inam} + 2\sum_{ef}G_{ef}\tilde{L}_{ieaf}
+\end{multline}
+
+\begin{multline}
+  R_{ab}^{ij} = 2\widetilde{\left<ij\middle|ab\right>} + 2P_{ia,jb}\lambda_a^i\tilde{f}_{jb} + 2P_{ia,jb}\sum_e\lambda_e^i\widetilde{\left<ej\middle|ab\right>} - 2P_{ia,jb}\sum_m\lambda_a^m\widetilde{\left<ij\middle|mb\right>} + 2P_{ia,jb}\sum_e\lambda_{ae}^{ij}F_{eb} - 2P_{ia,jb}\sum_m\lambda_{ab}^{im}F_{jm}\\
+  + 2\sum_{ef}\lambda_{ef}^{ij}W_{efab} + 2\sum_{mn}\lambda_{ab}^{mn}W_{ijmn} + P_{ia,jb}\sum_{me}\left(2\lambda_{ae}^{im} - \lambda_{ea}^{im}\right)W_{ejmb} - P_{ia,jb}\sum_{me}\lambda_{ea}^{im}W_{ejbm} - 2P_{ia,jb}\sum_{me}\lambda_{eb}^{im}W_{ejam}\\
+  - 2P_{ia,jb}\sum_eG_{be}\widetilde{\left<ij\middle|ae\right>} - 2\sum_mG_{jm}\widetilde{\left<im\middle|ab\right>}
 \end{multline}
 
 \begin{equation}
-  W_{ijak} = \tei{ij}{ak} + \sum_{e}t_k^e\tei{ij}{ae}
+  W_{eima} = \tilde{L}_{eima} + \sum_{nf}\left(2t_{mn}^{ef} - t_{mn}^{fe}\right)\tilde{L}_{inaf}
 \end{equation}
 
 \begin{equation}
-  W_{iabc} = \tei{ia}{bc} - \sum_mt_m^a\tei{im}{bc}
-\end{equation}
-
-The value $W_{abij}$ is simply the $T_2$ residual, which at CCSD convergence should be zero.
-
-\begin{equation}
-  W_{abij} = 0
+  W_{eiam} = \widetilde{\left<ei\middle|am\right>} - \sum_{nf}t_{mn}^{fe}\widetilde{\left<in\middle|fa\right>}
 \end{equation}
 
 \begin{equation}
-  W_{ijab} = \tei{ij}{ab}
-\end{equation}
-
-\section{Right Vector}
-
-Now that we have the diagrams, we need to compute the following.
-
-\begin{equation}
-  \left<\Phi_\mu\middle|\overline{H}\hat{R}\middle|\Phi_0\right>
-\end{equation}
-
-\subsection{Zero-order terms}
-
-\begin{equation}
-  \left<\Phi_0\middle|\overline{H}\hat{R}_0\middle|\Phi_0\right> = r_0 E_{CCSD}
+  W_{efam} = \tilde{L}_{efam} - \sum_n\left(2t_{mn}^{fe} - t_{mn}^{ef}\right)\tilde{f}_{na}
 \end{equation}
 
 \begin{equation}
-  \left<\Phi_i^a\middle|\overline{H}\hat{R}_0\middle|\Phi_0\right> = 0
+  W_{iemn} = \tilde{L}_{iemn} + \sum_f\left(2t_{mn}^{fe} - t_{mn}^{ef}\right)\tilde{f}_{if}
 \end{equation}
 
 \begin{equation}
-  \left<\Phi_{ij}^{ab}\middle|\overline{H}\hat{R}_0\middle|\Phi_0\right> = 0
-\end{equation}
-
-\subsection{First-order terms}
-
-\begin{equation}
-  \left<\Phi_0\middle|\overline{H}\hat{R}_1\middle|\Phi_0\right> = \sum_{me}r_m^eF_{me}
+  G_{mn} = \sum_{kef}\left(2\lambda_{ef}^{mk} - \lambda_{fe}^{mk}\right)t_{nk}^{ef}
 \end{equation}
 
 \begin{equation}
-  \left<\Phi_i^a\middle|\overline{H}\hat{R}_1\middle|\Phi_0\right> = \sum_m r_m^a F_{mi} - \sum_e r_i^e F_{ae} - \sum_{me} r_m^e W_{maei}
+  G_{ef} = \sum_{mnc}\left(2\lambda_{ec}^{mn} - \lambda_{ce}^{mn}\right)t_{mn}^{fc}
 \end{equation}
 
 \begin{equation}
-  \left<\Phi_{ij}^{ab}\middle|\overline{H}\hat{R}_1\middle|\Phi_0\right> = P_{ij}^-\sum_er_i^eW_{abej} - P_{ab}^-\sum_mr_m^aW_{mbij}
+  W_{efab} = \widetilde{\left<ef\middle|ab\right>} + \sum_{mn}t_{mn}^{ef}\widetilde{\left<mn\middle|ab\right>}
 \end{equation}
 
-\subsection{Second-order terms}
+\section{Reduced Density Matrix}
+
+The one-particle reduced density matrix can be found as follows.
 
 \begin{equation}
-  \left<\Phi_0\middle|\overline{H}\hat{R}_2\middle|\Phi_0\right> = \frac{1}{4}\sum_{mnef} r_{mn}^{ef}W_{mnef}
-\end{equation}
-
-\begin{equation}
-  \left<\Phi_i^a\middle|\overline{H}\hat{R}_2\middle|\Phi_0\right> = -\sum_{me}r_{mi}^{ae}F_{me} + \frac{1}{2}\sum_{mne}r_{mn}^{ea}W_{mnei} - \frac{1}{2}\sum_{mef} r_{mi}^{ef}W_{maef}
-\end{equation}
-
-\begin{equation}
-  \left<\Phi_{ij}^{ab}\middle|\overline{H}\hat{R}_2\middle|\Phi_0\right> = -P_{ij}^-\sum_m r_{mj}^{ab}F_{mi} + P_{ab}^-\sum_e r_{ij}^{eb}F_{ae} + \frac{1}{2}\sum_{mn} r_{mn}^{ab}W_{mnij} + \frac{1}{2}\sum_{ef} r_{ij}^{ef}W_{abef} - P_{ij}^-P_{ab}^-\sum_{me}r_{im}^{ae}W_{mbej}
-\end{equation}
-
-\subsection{Combined expressions}
-
-\begin{equation}
-  \left<\Phi_0\middle|\overline{H}\hat{R}\middle|\Phi_0\right> = r_0E_{CCSD} + \sum_{me}r_m^eF_{me} + \frac{1}{4}\sum_{mnef}r_{mn}^{ef}W_{mnef}
+  \tilde{\rho}_{ij} = \delta_{ij} - \frac{1}{2}\sum_{mef}\lambda_{ef}^{jm}t_{im}^{ef}
 \end{equation}
 
 \begin{equation}
-  \left<\Phi_i^a\middle|\overline{H}\hat{R}\middle|\Phi_0\right> = \sum_mr_m^aF_{mi} - \sum_er_i^eF_{ae} - \sum_{me}r_m^eW_{maei} - \sum_{me}r_{mi}^{ae}F_{me} + \frac{1}{2}\sum_{mne}r_{mn}^{ae}W_{mnei} - \frac{1}{2}\sum_{mef}r_{mi}^{ef}W_{maef}
+  \tilde{\rho}_{ab} = \frac{1}{2}\sum_{mne}\lambda_{ae}^{mn}t_{mn}^{be}
+\end{equation}
+
+\begin{equation}
+  \tilde{\rho}_{ia} = \lambda_a^i
+\end{equation}
+
+\begin{equation}
+  \tilde{\rho}_{ai} = \sum_{me}\lambda_e^mt_{im}^{ae}
+\end{equation}
+
+\begin{equation}
+  \rho_{ij} = \tilde{\rho}_{ij} - \delta_{ij} - \sum_et_j^e\tilde{\rho}_{ie}
+\end{equation}
+
+\begin{equation}
+  \rho_{ab} = \tilde{\rho}_{ab} + \sum_mt_m^a\tilde{\rho}_{mb}
+\end{equation}
+
+\begin{equation}
+  \rho_{ia} = \tilde{\rho}_{ia}
+\end{equation}
+
+In this part of the matrix, the tilde can go over either of the $\rho$ matrices being summed over. The $\tilde{\rho}_{mi}$ is chosen somewhat arbitrarily.
+
+\begin{equation}
+  \rho_{ai} = \tilde{\rho}_{ai} - \sum_{e}t_i^e\rho_{ae} + \sum_mt_m^a\tilde{\rho}_{mi}
+\end{equation}
+
+\subsection{Spin-integration}
+
+The $T_1$-transformation equations remain the same, with only one exception. Only the original intermediates change.
+
+\begin{equation}
+  \tilde{\rho}_{ij} = 2\delta_{ij} - 2\sum_{mef}\left(2\lambda_{ef}^{jm} - \lambda_{fe}^{jm}\right)t_{im}^{ef}
+\end{equation}
+
+\begin{equation}
+  \tilde{\rho}_{ab} = 2\sum_{mne}\left(2\lambda_{ae}^{mn} - \lambda_{ea}^{mn}\right)t_{mn}^{be}
+\end{equation}
+
+\begin{equation}
+  \tilde{\rho}_{ia} = 2\lambda_a^i
+\end{equation}
+
+\begin{equation}
+  \tilde{\rho}_{ai} = 2\sum_{me}\lambda_m^e\left(2t_{im}^{ae} - t_{im}^{ea}\right)
+\end{equation}
+
+\begin{equation}
+  \rho_{ij} = \tilde{\rho}_{ij} - 2\delta_{ij} - \sum_et_j^e\tilde{\rho}_{ie}
+\end{equation}
+
+\section{Common EOM Matrix Elements}
+
+Note that here, $W$ and $F$ are different from what they meant previously.
+
+\subsection{One-Particle}
+
+At CCSD convergence, this first matrix element becomes zero.
+\begin{equation}
+  \mathcal{F}_{ai} = \tilde{f}_{ai} + \sum_{me}t_{im}^{ae}\tilde{f}_{me} + \frac{1}{2}\sum_{mef}t_{im}^{ef}\widetilde{\tei{am}{ef}} - \frac{1}{2}\sum_{mne}t_{mn}^{ae}\widetilde{\tei{mn}{ie}} = 0
+\end{equation}
+
+\begin{equation}
+  \mathcal{F}_{ij} = \tilde{f}_{ij} + \frac{1}{2}\sum_{mef}t_{jm}^{ef}\tei{im}{ef}
+\end{equation}
+
+\begin{equation}
+  \mathcal{F}_{ab} = \tilde{f}_{ab} - \frac{1}{2}\sum_{mne}t_{mn}^{ae}\tei{mn}{be}
+\end{equation}
+
+\begin{equation}
+  \mathcal{F}_{ia} = \tilde{f}_{ia}
+\end{equation}
+
+\subsection{Two-Particle}
+Note the following symmetries. These symmetries allow us to reduce the set of elements to compute, going from 16 to 9.
+
+\begin{equation}
+  \mathcal{W}_{pqrs} = \mathcal{W}_{qpsr} = -\mathcal{W}_{pqsr} = -\mathcal{W}_{qprs}
+\end{equation}
+
+At CCSD convergence, this first matrix element becomes zero.
+
+\begin{equation}
+  \mathcal{W}_{abij} = \widetilde{\tei{ab}{ij}} - P_{ij}^-\sum_mt_{im}^{ab}F_{mj} + P_{ab}^-\sum_mt_{ij}^{ae}F_{be} + \frac{1}{2}\sum_{ef}t_{ij}^{ef}\widetilde{\tei{ab}{ef}} + \frac{1}{2}\sum_{mn}t_{mn}^{ab}W_{mnij} + P_{ij}^-P_{ab}^-\sum_{me}t_{im}^{ae}W_{mbej} = 0
+\end{equation}
+
+\begin{equation}
+  \mathcal{W}_{iajk} = \widetilde{\tei{ia}{jk}} + \sum_et_{jk}^{ea}\tilde{f}_{ie} - P_{jk}^-\sum_{me}t_{jm}^{ea}\widetilde{\tei{im}{ek}} + \frac{1}{2}\sum_{ef}t_{jk}^{ef}\widetilde{\tei{ia}{ef}}
+\end{equation}
+
+\begin{equation}
+  \mathcal{W}_{abci} = \widetilde{\tei{ab}{ci}} - \sum_mt_{mi}^{ab}\tilde{f}_{mc} - P_{ab}^-\sum_{me}t_{mi}^{ae}\widetilde{\tei{mb}{ce}} + \frac{1}{2}\sum_{mn}t_{mn}^{ab}\widetilde{\tei{mn}{ci}}
+\end{equation}
+
+\begin{equation}
+  \mathcal{W}_{ijkl} = \widetilde{\tei{ij}{kl}} + \frac{1}{2}\sum_{ef}t_{kl}^{ef}\tei{ij}{ef}
+\end{equation}
+
+\begin{equation}
+  \mathcal{W}_{abcd} = \widetilde{\tei{ab}{cd}} + \frac{1}{2}\sum_{mn}t_{mn}^{ab}\tei{mn}{cd}
+\end{equation}
+
+\begin{equation}
+  \mathcal{W}_{aijb} = \widetilde{\tei{ai}{jb}} + \sum_{me}t_{jm}^{ae}\tei{mi}{eb}
+\end{equation}
+
+\begin{equation}
+  \mathcal{W}_{ijka} = \widetilde{\tei{ij}{ka}}
+\end{equation}
+
+\begin{equation}
+  \mathcal{W}_{aibc} = \widetilde{\tei{ai}{bc}}
+\end{equation}
+
+\begin{equation}
+  \mathcal{W}_{ijab} = \widetilde{\tei{ij}{ab}}
+\end{equation}
+
+\subsection{Spin-integrated forms}
+
+\begin{equation}
+  \mathcal{F}_{ai} = \tilde{f}_{ai} + \sum_{me}\left(2t_{im}^{ae} - t_{im}^{ea}\right)\tilde{f}_{me} + \sum_{mef}t_{im}^{ef}\tilde{L}_{amef} - \sum_{mne}t_{mn}^{ae}\tilde{L}_{mnie} = 0
+\end{equation}
+
+\begin{equation}
+  \mathcal{F}_{ij} = \tilde{f}_{ij} + \sum_{mef}t_{jm}^{ef}L_{imef}
+\end{equation}
+
+\begin{equation}
+  \mathcal{F}_{ab} = \tilde{f}_{ab} - \sum_{mne}t_{mn}^{ae} L_{mnbe}
+\end{equation}
+
+\begin{equation}
+  \mathcal{F}_{ia} = \tilde{f}_{ia}
+\end{equation}
+
+For the spin-integrated matrix elements, the two-body symmetries are fewer. This means we need a couple more matrix elements.
+
+\begin{equation}
+  \mathcal{W}_{pqrs} = \mathcal{W}_{qpsr}
 \end{equation}
 
 \begin{multline}
-  \left<\Phi_{ij}^{ab}\middle|\overline{H}\hat{R}\middle|\Phi_0\right> = P_{ij}^-\sum_er_i^eW_{abej} - P_{ab}^-\sum_mr_m^aW_{mbij} - P_{ij}^-\sum_mr_{mj}^{ab}F_{mi} + P_{ab}^-\sum_er_{ij}^{eb}F_{ae} + \frac{1}{2}\sum_{mn}r_{mn}^{ab}W_{mnij} \\
-  + \frac{1}{2}\sum_{ef}r_{ij}^{ef}W_{abef} - P_{ij}^-P_{ab}^-\sum_{me}r_{im}^{ae}W_{mbej}
+  \mathcal{W}_{abij} = \widetilde{\left<ab\middle|ij\right>} - P_{ia,jb}\sum_mt_{im}^{ab}F_{mj} + P_{ia,jb}\sum_mt_{ij}^{ae}F_{be} + \sum_{ef}t_{ij}^{ef}\widetilde{\left<ab\middle|ef\right>} + \sum_{mn}t_{mn}^{ab}W_{mnij} \\
+  + \frac{1}{2}P_{ia,jb}\sum_{me}\left(2t_{im}^{ae} - t_{im}^{ea}\right)W_{mbej}' - P_{ia,jb}\sum_{me}t_{im}^{ae}W_{mbje} - P_{ia,jb}\sum_{me}t_{im}^{eb}W_{maje} \ne 0
 \end{multline}
+
+\begin{equation}
+  W_{mbej}' = \widetilde{\left<mb\middle|ej\right>} + \frac{1}{2}\sum_{nf}\left(2t_{nj}^{fb} - t_{nj}^{bf}\right)\left<mn\middle|ef\right> - \frac{1}{2}\sum_{nf}t_{nj}^{fb}\left<mn\middle|fe\right>
+\end{equation}
+
+\begin{multline}
+  \mathcal{W}_{iajk} = \widetilde{\left<ia\middle|jk\right>} + \sum_et_{jk}^{ea}\tilde{f}_{ie} - \sum_{me}\left(2t_{km}^{ae} - t_{km}^{ea}\right)\widetilde{\left<im\middle|je\right>} - \sum_{me}t_{km}^{ae}\widetilde{\left<im\middle|ej\right>} \\
+  - \sum_{me}t_{jm}^{ea}\widetilde{\left<im\middle|ek\right>} + \sum_{ef}t_{jk}^{ef}\widetilde{\left<ia\middle|ef\right>}
+\end{multline}
+
+\begin{multline}
+  \mathcal{W}_{abci} = \widetilde{\left<ab\middle|ci\right>} - \sum_mt_{mi}^{ab}\tilde{f}_{mc} - \sum_{me}\left(2t_{mi}^{eb} - t_{mi}^{be}\right)\widetilde{\left<ma\middle|ec\right>} - \sum_{me}t_{mi}^{eb}\widetilde{\left<ma\middle|ce\right>} \\
+  - \sum_{me}t_{mi}^{ae}\widetilde{\left<mb\middle|ce\right>} + \sum_{mn}t_{mn}^{ab}\widetilde{\left<mn\middle|ci\right>}
+\end{multline}
+
+\begin{equation}
+  \mathcal{W}_{ijkl} = \widetilde{\left<ij\middle|kl\right>} + \sum_{ef}t_{kl}^{ef}\left<ij\middle|ef\right>
+\end{equation}
+
+\begin{equation}
+  \mathcal{W}_{abcd} = \widetilde{\left<ab\middle|cd\right>} + \sum_{mn}t_{mn}^{ab}\left<mn\middle|cd\right>
+\end{equation}
+
+\begin{equation}
+  \mathcal{W}_{aijb} = \widetilde{\left<ai\middle|jb\right>} + \sum_{me}\left(2t_{jm}^{ae} - t_{jm}^{ea}\right)\left<mi\middle|eb\right> - \sum_{me}t_{jm}^{ae}\left<mi\middle|be\right>
+\end{equation}
+
+\begin{equation}
+  \mathcal{W}_{aibj} = \widetilde{\left<ai\middle|bj\right>} - \sum_{me}t_{jm}^{ea}\left<mi\middle|be\right>
+\end{equation}
+
+\begin{equation}
+  \mathcal{W}_{ijka} = \widetilde{\left<ij\middle|ka\right>}
+\end{equation}
+
+\begin{equation}
+  \mathcal{W}_{aibc} = \widetilde{\left<ai\middle|bc\right>}
+\end{equation}
+
+\begin{equation}
+  \mathcal{W}_{ijab} = \widetilde{\left<ij\middle|ab\right>}
+\end{equation}
+
+\section{Right EOM Equations}
+
+\begin{equation}
+  \left<\Phi_i^a\middle|\left[\overline{H}, \hat{R}\right]\middle|\Phi_0\right> = \sigma_i^a
+\end{equation}
+
+\begin{equation}
+  \left<\Phi_{ij}^{ab}\middle|\left[\overline{H}, \hat{R}\right]\middle|\Phi_0\right> = \sigma_{ij}^{ab}
+\end{equation}
+
+\begin{equation}
+  \sum_er_i^e\mathcal{F}_{ae} - \sum_mr_m^a\mathcal{F}_{mi} + \sum_{me}r_m^e\mathcal{W}_{amie} + \sum_{me} r_{im}^{ae}\mathcal{F}_{me} + \frac{1}{2}\sum_{mef}r_{im}^{ef}\mathcal{W}_{amef} - \frac{1}{2}\sum_{mne}r_{mn}^{ae}\mathcal{W}_{mnie} = \sigma_i^a
+\end{equation}
+
+\begin{multline}
+  P_{ij}^-\sum_er_i^e\mathcal{W}_{abej} - P_{ab}^-\sum_mr_m^a\mathcal{W}_{mbij} + P_{ab}^-\sum_er_{ij}^{ae}\mathcal{F}_{be} - P_{ij}^-\sum_mr_{im}^{ab}\mathcal{F}_{mj} + \frac{1}{2}\sum_{mn}r_{mn}^{ab}\mathcal{W}_{mnij} + \frac{1}{2}\sum_{ef}r_{ij}^{ef}\mathcal{W}_{abef} \\
+  + P_{ij}^-P_{ab}^-\sum_{me}r_{im}^{ae}\mathcal{W}_{mbej} + P_{ij}^-\sum_nX_{jn}t_{in}^{ab} - P_{ab}\sum_fX_{bf}t_{ij}^{af} = \sigma_{ij}^{ab}
+\end{multline}
+
+\begin{equation}
+  X_{jn} = \sum_{mef}r_{jm}^{ef}\widetilde{\tei{nm}{ef}}
+\end{equation}
+
+\begin{equation}
+  X_{bf} = \sum_{mne}r_{mn}^{be}\widetilde{\tei{mn}{fe}}
+\end{equation}
+
+Once we have found the single and double vector, we can find the reference coefficient.
+
+\begin{equation}
+  \left<\Phi_0\middle|\left[\overline{H}, \hat{R}\right]\middle|\Phi_0\right> = \omega r_0
+\end{equation}
+
+\begin{equation}
+  \sum_{ia}r_i^a\mathcal{F}_{ia} + \frac{1}{4}\sum_{ijab}r_{ij}^{ab}\mathcal{W}_{ijab} = \omega r_0
+\end{equation}
+
+\subsection{Spin integration}
+
+\begin{equation}
+  \sum_er_i^e\mathcal{F}_{ae} - \sum_mr_m^a\mathcal{F}_{mi} \sum_{me}r_m^e\Omega_{amie} + \sum_{me}\left(2r_{im}^{ae} - r_{im}^{ea}\right)\mathcal{F}_{me}+ \sum_{mef}r_{im}^{ef}\Omega_{amef} - \sum_{mne} r_{mn}^{ae}\Omega_{mnie} = \sigma_i^a
+\end{equation}
+
+\begin{multline}
+  P_{ia,jb}\sum_er_i^e\mathcal{W}_{abej} - P_{ia,jb}\sum_mr_m^a\mathcal{W}_{mbij} + P_{ia,jb}\sum_er_{ij}^{ae}\mathcal{F}_{be} - P_{ia,jb}\sum_mr_{im}^{ab}\mathcal{F}_{mj} + \sum_{mn}r_{mn}^{ab}\mathcal{W}_{mnij} + \\
+  \sum_{ef}r_{ij}^{ef}\mathcal{W}_{abef} + P_{ia,jb}\sum_{me}\left(2r_{im}^{ae} - r_{im}^{ea}\right)\Omega_{mbej} - \frac{1}{2}P_{ia,jb}\sum_{me}r_{im}^{ea}\mathcal{W}_{mbje} \\
+  - P_{ia,jb}\sum_{me}r_{im}^{eb}\mathcal{W}_{maje} + 2P_{ia,jb}\sum_nX_{jn}t_{in}^{ab} - 2P_{ia,jb}\sum_fX_{bf}t_{ij}^{af} = \sigma_{ij}^{ab}
+\end{multline}
+
+\begin{equation}
+  \Omega_{amie} = \Omega_{maei}
+\end{equation}
+
+\begin{equation}
+  \Omega_{amef} = 2\mathcal{W}_{amef} - \mathcal{W}_{amfe} = \tilde{L}_{amef}
+\end{equation}
+
+\begin{equation}
+  \Omega_{mnie} = 2\mathcal{W}_{mnie} - \mathcal{W}_{mnei} = \tilde{L}_{mnie}
+\end{equation}
+
+\begin{equation}
+  \Omega_{mbej} = 2\mathcal{W}_{mbej} - \mathcal{W}_{mbje} = \tilde{L}_{mbej} + \sum_{nf}\left(2t_{jn}^{bf} - t_{jn}^{fb}\right)\tilde{L}_{mnef}
+\end{equation}
+
+\begin{equation}
+  X_{jn} = \sum_{mef}r_{jm}^{ef}\tilde{L}_{nmef}
+\end{equation}
+
+\begin{equation}
+  X_{bf} = \sum_{mne} r_{mn}^{be}\tilde{L}_{mnfe}
+\end{equation}
+
+And for the reference coefficient, we get the following.
+
+\begin{equation}
+  2\sum_{ia}r_i^a\tilde{f}_{ia} + \sum_{ijab}r_{ij}^{ab}\tilde{L}_{ijab} = \omega r_0
+\end{equation}
+
+\section{Left Products}
+
+For the left-hand problem, we need to find the following.
+
+\begin{equation}
+  \left<\Phi_0\middle|\hat{L}\left[\overline{H}, \hat{\tau}_i^a\right]\middle|\Phi_0\right> = \Sigma_i^a
+\end{equation}
+
+\begin{equation}
+  \left<\Phi_0\middle|\hat{L}\left[\overline{H}, \hat{\tau}_{ij}^{ab}\right]\middle|\Phi_0\right> = \Sigma_{ij}^{ab}
+\end{equation}
+
+
 
 \end{document}
