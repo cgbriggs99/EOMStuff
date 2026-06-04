@@ -39,3 +39,13 @@
 
 # debug information files
 *.dwo
+
+# LaTeX stuff
+*.aux
+*.log
+*~
+
+*/build/*
+
+.cproject
+.project
