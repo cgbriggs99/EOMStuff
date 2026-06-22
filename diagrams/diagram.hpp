@@ -11,7 +11,6 @@
 #include <list>
 #include <string>
 #include <tuple>
-#include <variant>
 namespace diagram {
 
 // Based on the work of Kallay and Surjan.
@@ -47,6 +46,12 @@ private:
 
 std::list<Diagram> compute_cc_residual(int residual_exc, int max_exc,
 									   bool t1_transform, bool canonical);
+
+std::list<Diagram> compute_ccn_residual(int residual, int max_excitation,
+										bool t1_transform, bool canonical);
+
+std::list<Diagram> compute_ccp_residual(int residual_exc, int max_exc,
+										bool t1_transform, bool canonical);
 
 } // namespace diagram
 

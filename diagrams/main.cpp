@@ -14,6 +14,13 @@ using namespace std;
 using namespace diagram;
 
 int main(void) {
+	int theory;
+
+	std::printf("Enter the type of theory (0 for CC(n), 1 for CC(n)(n-1), 2 "
+				"for CCn): ");
+
+	std::scanf("%d", &theory);
+
 	std::printf("Enter a level of theory: ");
 
 	int level = 0;
@@ -27,7 +34,19 @@ int main(void) {
 	std::scanf("%d", &t1_trans);
 
 	for (int i = 0; i <= level; i++) {
-		auto terms = compute_cc_residual(i, level, t1_trans, true);
+		std::list<Diagram> terms;
+		switch (theory) {
+		case 0:
+			terms = std::move(compute_cc_residual(i, level, t1_trans, true));
+			break;
+		case 1:
+			break;
+		case 2:
+			terms = std::move(diagram::compute_ccn_residual(i, level, t1_trans, true));
+			break;
+		default:
+			throw std::runtime_error("Invalid theory value!");
+		}
 
 		if (i == 0) {
 			std::printf("\nECC = ");
@@ -49,6 +68,7 @@ int main(void) {
 			}
 		}
 	}
+	std::printf("\n");
 
 	return 0;
 }

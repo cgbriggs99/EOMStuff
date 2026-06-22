@@ -220,14 +220,17 @@ static void assign_Fij_terms(int residual, int max_excitation,
 	}
 }
 
-static void assign_Fia_terms(int residual, int max_excitation,
-							 std::list<Diagram> *out, bool t1_transform) {
+static void assign_Fia_t_terms(int residual, int max_excitation,
+							   std::list<Diagram> *out, bool t1_transform) {
 	if (residual + 1 <= max_excitation && residual >= 0 &&
 		!(residual == 0 && t1_transform)) {
 		out->emplace_back(2, std::make_tuple(residual + 1, 2, 1), zero_tuple,
 						  zero_tuple, zero_tuple);
 	}
+}
 
+static void assign_Fia_t2_terms(int residual, int max_excitation,
+								std::list<Diagram> *out, bool t1_transform) {
 	for (int x = std::max(residual - max_excitation, (t1_transform) ? 2 : 1);
 		 x <= max_excitation; x++) {
 		int y = residual - x + 1;
@@ -252,13 +255,24 @@ static void assign_Fia_terms(int residual, int max_excitation,
 	}
 }
 
-static void assign_Wabcd_terms(int residual, int max_excitation,
-							   std::list<Diagram> *out, bool t1_transform) {
+static void assign_Fia_terms(int residual, int max_excitation,
+							 std::list<Diagram> *out, bool t1_transform) {
+
+	assign_Fia_t_terms(residual, max_excitation, out, t1_transform);
+
+	assign_Fia_t2_terms(residual, max_excitation, out, t1_transform);
+}
+
+static void assign_Wabcd_t_terms(int residual, int max_excitation,
+								 std::list<Diagram> *out, bool t1_transform) {
 	if (max_excitation >= 2 && residual >= 2 && residual <= max_excitation) {
 		out->emplace_back(3, std::make_tuple(residual, 2, 2), zero_tuple,
 						  zero_tuple, zero_tuple);
 	}
+}
 
+static void assign_Wabcd_t2_terms(int residual, int max_excitation,
+								  std::list<Diagram> *out, bool t1_transform) {
 	for (int x = std::max(residual - max_excitation, (t1_transform) ? 2 : 1);
 		 x <= max_excitation; x++) {
 		int y = residual - x;
@@ -278,13 +292,23 @@ static void assign_Wabcd_terms(int residual, int max_excitation,
 	}
 }
 
-static void assign_Wijkl_terms(int residual, int max_excitation,
+static void assign_Wabcd_terms(int residual, int max_excitation,
 							   std::list<Diagram> *out, bool t1_transform) {
+
+	assign_Wabcd_t_terms(residual, max_excitation, out, t1_transform);
+	assign_Wabcd_t2_terms(residual, max_excitation, out, t1_transform);
+}
+
+static void assign_Wijkl_t_terms(int residual, int max_excitation,
+								 std::list<Diagram> *out, bool t1_transform) {
 	if (max_excitation >= 2 && residual >= 2 && residual <= max_excitation) {
 		out->emplace_back(4, std::make_tuple(residual, 2, 0), zero_tuple,
 						  zero_tuple, zero_tuple);
 	}
+}
 
+static void assign_Wijkl_t2_terms(int residual, int max_excitation,
+								  std::list<Diagram> *out, bool t1_transform) {
 	for (int x = std::max(residual - max_excitation, (t1_transform) ? 2 : 1);
 		 x <= max_excitation; x++) {
 		int y = residual - x;
@@ -304,14 +328,24 @@ static void assign_Wijkl_terms(int residual, int max_excitation,
 	}
 }
 
-static void assign_Waijb_terms(int residual, int max_excitation,
+static void assign_Wijkl_terms(int residual, int max_excitation,
 							   std::list<Diagram> *out, bool t1_transform) {
+	assign_Wijkl_t_terms(residual, max_excitation, out, t1_transform);
+
+	assign_Wijkl_t2_terms(residual, max_excitation, out, t1_transform);
+}
+
+static void assign_Waijb_t_terms(int residual, int max_excitation,
+								 std::list<Diagram> *out, bool t1_transform) {
 	if (residual > 0 && !(t1_transform && residual == 1) &&
 		residual <= max_excitation) {
 		out->emplace_back(5, std::make_tuple(residual, 2, 1), zero_tuple,
 						  zero_tuple, zero_tuple);
 	}
+}
 
+static void assign_Waijb_t2_terms(int residual, int max_excitation,
+								  std::list<Diagram> *out, bool t1_transform) {
 	for (int x = std::max(residual - max_excitation, (t1_transform) ? 2 : 1);
 		 x <= max_excitation; x++) {
 		int y = residual - x;
@@ -336,13 +370,23 @@ static void assign_Waijb_terms(int residual, int max_excitation,
 	}
 }
 
-static void assign_Wiabc_terms(int residual, int max_excitation,
+static void assign_Waijb_terms(int residual, int max_excitation,
 							   std::list<Diagram> *out, bool t1_transform) {
+	assign_Waijb_t_terms(residual, max_excitation, out, t1_transform);
+	assign_Waijb_t2_terms(residual, max_excitation, out, t1_transform);
+}
+
+static void assign_Wiabc_t_terms(int residual, int max_excitation,
+								 std::list<Diagram> *out, bool t1_transform) {
 	if (max_excitation >= 2 && residual >= 1 &&
 		residual + 1 <= max_excitation) {
 		out->emplace_back(6, std::make_tuple(residual + 1, 3, 2), zero_tuple,
 						  zero_tuple, zero_tuple);
 	}
+}
+
+static void assign_Wiabc_t2_terms(int residual, int max_excitation,
+								  std::list<Diagram> *out, bool t1_transform) {
 
 	for (int x = std::max(residual - max_excitation, (t1_transform) ? 2 : 1);
 		 x <= max_excitation; x++) {
@@ -376,7 +420,10 @@ static void assign_Wiabc_terms(int residual, int max_excitation,
 			}
 		}
 	}
+}
 
+static void assign_Wiabc_t3_terms(int residual, int max_excitation,
+								  std::list<Diagram> *out, bool t1_transform) {
 	for (int z = t1_transform ? 2 : 1;
 		 z <= std::min(max_excitation, residual - ((t1_transform) ? 4 : 2));
 		 z++) {
@@ -414,14 +461,26 @@ static void assign_Wiabc_terms(int residual, int max_excitation,
 	}
 }
 
-static void assign_Wijak_terms(int residual, int max_excitation,
+static void assign_Wiabc_terms(int residual, int max_excitation,
 							   std::list<Diagram> *out, bool t1_transform) {
+	assign_Wiabc_t_terms(residual, max_excitation, out, t1_transform);
+
+	assign_Wiabc_t2_terms(residual, max_excitation, out, t1_transform);
+
+	assign_Wiabc_t3_terms(residual, max_excitation, out, t1_transform);
+}
+
+static void assign_Wijak_t_terms(int residual, int max_excitation,
+								 std::list<Diagram> *out, bool t1_transform) {
 	if (max_excitation >= 2 && residual >= 1 &&
 		residual + 1 <= max_excitation) {
 		out->emplace_back(7, std::make_tuple(residual + 1, 3, 1), zero_tuple,
 						  zero_tuple, zero_tuple);
 	}
+}
 
+static void assign_Wijak_t2_terms(int residual, int max_excitation,
+								  std::list<Diagram> *out, bool t1_transform) {
 	for (int x = std::max(residual - max_excitation, (t1_transform) ? 2 : 1);
 		 x <= max_excitation; x++) {
 		int y = residual - x + 1;
@@ -448,7 +507,10 @@ static void assign_Wijak_terms(int residual, int max_excitation,
 							  std::make_tuple(y, 2, 1), zero_tuple, zero_tuple);
 		}
 	}
+}
 
+static void assign_Wijak_t3_terms(int residual, int max_excitation,
+								  std::list<Diagram> *out, bool t1_transform) {
 	for (int z = t1_transform ? 2 : 1;
 		 z <= std::min(max_excitation, residual - ((t1_transform) ? 4 : 2));
 		 z++) {
@@ -486,6 +548,15 @@ static void assign_Wijak_terms(int residual, int max_excitation,
 	}
 }
 
+static void assign_Wijak_terms(int residual, int max_excitation,
+							   std::list<Diagram> *out, bool t1_transform) {
+	assign_Wijak_t_terms(residual, max_excitation, out, t1_transform);
+
+	assign_Wijak_t2_terms(residual, max_excitation, out, t1_transform);
+
+	assign_Wijak_t3_terms(residual, max_excitation, out, t1_transform);
+}
+
 static void assign_Wabic_terms(int residual, int max_excitation,
 							   std::list<Diagram> *out, bool t1_transform) {
 	if (residual - 1 <= max_excitation && !(residual == 2 && t1_transform) &&
@@ -504,12 +575,15 @@ static void assign_Waijk_terms(int residual, int max_excitation,
 	}
 }
 
-static void assign_Wijab_terms(int residual, int max_excitation,
-							   std::list<Diagram> *out, bool t1_transform) {
+static void assign_Wijab_t_terms(int residual, int max_excitation,
+								 std::list<Diagram> *out, bool t1_transform) {
 	if (residual + 2 <= max_excitation && max_excitation >= 2) {
 		out->emplace_back(10, std::make_tuple(residual + 2, 4, 2), zero_tuple,
 						  zero_tuple, zero_tuple);
 	}
+}
+static void assign_Wijab_t2_terms(int residual, int max_excitation,
+								  std::list<Diagram> *out, bool t1_transform) {
 
 	for (int x = std::max(residual - max_excitation, (t1_transform) ? 2 : 1);
 		 x <= max_excitation; x++) {
@@ -549,6 +623,9 @@ static void assign_Wijab_terms(int residual, int max_excitation,
 							  std::make_tuple(y, 2, 2), zero_tuple, zero_tuple);
 		}
 	}
+}
+static void assign_Wijab_t3_terms(int residual, int max_excitation,
+								  std::list<Diagram> *out, bool t1_transform) {
 
 	for (int z = t1_transform ? 2 : 1;
 		 z <= std::min(max_excitation, residual - ((t1_transform) ? 4 : 2));
@@ -621,6 +698,9 @@ static void assign_Wijab_terms(int residual, int max_excitation,
 			}
 		}
 	}
+}
+static void assign_Wijab_t4_terms(int residual, int max_excitation,
+								  std::list<Diagram> *out, bool t1_transform) {
 
 	for (int w = t1_transform ? 2 : 1;
 		 w <= std::min(max_excitation, residual - ((t1_transform) ? 6 : 3));
@@ -679,6 +759,17 @@ static void assign_Wijab_terms(int residual, int max_excitation,
 	}
 }
 
+static void assign_Wijab_terms(int residual, int max_excitation,
+							   std::list<Diagram> *out, bool t1_transform) {
+	assign_Wijab_t_terms(residual, max_excitation, out, t1_transform);
+
+	assign_Wijab_t2_terms(residual, max_excitation, out, t1_transform);
+
+	assign_Wijab_t3_terms(residual, max_excitation, out, t1_transform);
+
+	assign_Wijab_t4_terms(residual, max_excitation, out, t1_transform);
+}
+
 static void assign_Fai_terms(int residual, std::list<Diagram> *out) {
 	if (residual == 1) {
 		out->emplace_back(11, zero_tuple, zero_tuple, zero_tuple, zero_tuple);
@@ -705,7 +796,7 @@ std::list<Diagram> compute_cc_residual(int residual, int max_excitation,
 
 	assign_Fij_terms(residual, max_excitation, &out, t1_transform);
 
-	if (!t1_transform && !canonical) {
+	if (t1_transform || !canonical) {
 		assign_Fia_terms(residual, max_excitation, &out, t1_transform);
 	}
 
@@ -725,13 +816,76 @@ std::list<Diagram> compute_cc_residual(int residual, int max_excitation,
 
 	assign_Wijab_terms(residual, max_excitation, &out, t1_transform);
 
-	if (!t1_transform && !canonical) {
+	if (t1_transform || !canonical) {
 		assign_Fai_terms(residual, &out);
 	}
 
 	assign_Wabij_terms(residual, &out);
 
 	return out;
+}
+
+std::list<Diagram> compute_ccn_residual(int residual, int max_excitation,
+										bool t1_transform, bool canonical) {
+
+	if (residual < max_excitation) {
+		return compute_cc_residual(residual, max_excitation, t1_transform,
+								   canonical);
+	} else {
+		std::list<Diagram> out;
+
+		// When the residual and max excitation match, we need to use the
+		// perturbative expansion.
+		assign_Fab_terms(residual, max_excitation, &out, true);
+		assign_Fij_terms(residual, max_excitation, &out, true);
+
+		if (!canonical) {
+			assign_Fia_terms(residual, max_excitation, &out, true);
+		}
+
+		assign_Wabcd_terms(residual, max_excitation - 1, &out, t1_transform);
+
+		assign_Wijkl_terms(residual, max_excitation - 1, &out, t1_transform);
+
+		assign_Waijb_terms(residual, max_excitation - 1, &out, t1_transform);
+
+		assign_Wiabc_terms(residual, max_excitation - 2, &out, t1_transform);
+
+		assign_Wijak_terms(residual, max_excitation - 2, &out, t1_transform);
+
+		assign_Wabic_terms(residual, max_excitation - 1, &out, t1_transform);
+
+		assign_Waijk_terms(residual, max_excitation - 1, &out, t1_transform);
+
+		assign_Wijab_terms(residual, max_excitation - 1, &out, t1_transform);
+
+		if (!canonical) {
+			assign_Fai_terms(residual, &out);
+		}
+
+		assign_Wabij_terms(residual, &out);
+
+		return out;
+	}
+}
+
+std::list<Diagram> compute_ccp_residual(int residual, int max_excitation,
+										bool t1_transform, bool canonical) {
+	if (residual == 0) {
+		auto out =
+			compute_cc_residual(0, max_excitation, t1_transform, canonical);
+	}
+	if (residual < max_excitation) {
+		return compute_cc_residual(residual, max_excitation, t1_transform,
+								   canonical);
+	} else {
+		std::list<Diagram> out;
+		
+		// CC(n) is correct to n + 1 order. We need to correct out to 2n + 3 order.
+		// The CC(n)(n + 1) will have a contribution starting at n order.
+
+		return out;
+	}
 }
 
 } // namespace diagram
