@@ -1,4 +1,2 @@
 
-target_sources(general_dlpno INTERFACE general-dlpno.hpp)
-
-target_sources(general_dlpno PUBLIC)
+target_sources(general_dlpno PUBLIC theory-input.cpp utils.cpp)

@@ -1,7 +1,7 @@
 
 # PYTHONPATH must include directory above plugin directory.
 #     Define either externally or here, then import plugin.
-sys.path.insert(0, './..')
+sys.path.insert(0, '.')
 import general_dlpno
 
 molecule {
@@ -22,6 +22,8 @@ set general_dlpno {
   cc_method ccsd
 }
 
-energy('general_dlpno')
+E = energy('general-dlpno')
 
-general_dlpno.exampleFN()
+E_expected = energy("dlpno-ccsd")
+
+assert(abs(E - E_expected) < 1e-6)

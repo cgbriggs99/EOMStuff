@@ -35,8 +35,19 @@ endif ()
 
 project(general_dlpno CXX)
 
-find_package(psi4 1.1 REQUIRED)
+find_package(psi4 1 REQUIRED)
 
-add_psi4_plugin(general_dlpno plugin.cc)
+add_library(general_dlpno SHARED)
 
+target_link_libraries(general_dlpno PUBLIC psi4::core)
+
+add_subdirectory(include)
 add_subdirectory(src)
+
+add_psi4_plugin(general_dlpno_plugin plugin.cc)
+
+target_link_libraries(general_dlpno_plugin PUBLIC general_dlpno)
+
+add_executable(test_parser test_parser.cpp)
+
+target_link_libraries(test_parser PUBLIC general_dlpno)

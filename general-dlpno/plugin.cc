@@ -35,6 +35,8 @@
 #include "psi4/libpsio/psio.hpp"
 #include "psi4/libpsio/psio.hpp"
 
+#include <include/general-dlpno.hpp>
+
 namespace psi{ namespace general_dlpno {
 
 extern "C" PSI_API

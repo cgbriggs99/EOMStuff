@@ -49,3 +49,8 @@
 
 .cproject
 .project
+.pydevproject
+
+*/__pycache__
+*/output.dat
+*/timer.dat
