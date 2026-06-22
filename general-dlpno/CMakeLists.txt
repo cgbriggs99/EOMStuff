@@ -39,4 +39,4 @@ find_package(psi4 1.1 REQUIRED)
 
 add_psi4_plugin(general_dlpno plugin.cc)
 
-add_subdirectory(general_dlpno)
+add_subdirectory(src)
