@@ -52,5 +52,6 @@
 .pydevproject
 
 */__pycache__
+__pycache__
 */output.dat
-*/timer.dat
+timer.dat
