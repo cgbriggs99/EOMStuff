@@ -1,0 +1,40 @@
+# We'll use defaults from the LLVM style, but with some modifications so that it's close to the CDT K&R style.
+BasedOnStyle: LLVM
+UseTab: Always
+IndentWidth: 4
+
+Language: Cpp
+ColumnLimit: 140
+IncludeBlocks: Regroup
+AlwaysBreakTemplateDeclarations: Yes
+AllowShortFunctionsOnASingleLine: InlineOnly
+AlignConsecutiveMacros: true
+IndentPPDirectives: AfterHash
+AlignConsecutiveAssignments: true
+AlignConsecutiveDeclarations: true
+QualifierAlignment: Right
+IncludeCategories:
+  - Regex: '^"psi4/.*"'
+    Priority: 300
+  - Regex: '^<include/.*>'
+  	Priority: 200
+  - Regex: '^<Einsums/Config/WarningsPrefix.hpp>'
+    Priority: 100
+  - Regex: '^<catch2/catch_all.hpp>'
+    Priority: 10
+  - Regex: '^<Einsums/Testing.hpp>'
+    Priority: 10
+  - Regex: '^<Einsums/Config.hpp>'
+    Priority: 1
+  - Regex: '^<Einsums/_.*\.hpp>'
+    Priority: 2
+  - Regex: '^<Einsums/.*\.h.*>'
+    Priority: 3
+  - Regex: '^<range/.*>'
+    Priority: 4
+  - Regex: '^<fmt/.*>'
+    Priority: 4
+  - Regex: '^<.*'
+    Priority: 5
+  - Regex: '.*'
+    Priority: 6
