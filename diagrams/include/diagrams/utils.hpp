@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace psi::general_dlpno {
+namespace diagram {
 
 void to_upper(std::string *str);
 

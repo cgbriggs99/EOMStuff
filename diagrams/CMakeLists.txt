@@ -5,27 +5,22 @@ project(diagrams CXX)
 set(CMAKE_CXX_STANDARD 20)
 
 include(GNUInstallDirs)
+include(CMakePackageConfigHelpers)
 
-add_library(diagrams SHARED diagram.cpp)
+add_library(diagrams SHARED)
 
-target_sources(diagrams PUBLIC FILE_SET headers TYPE HEADERS FILES diagram.hpp)
+add_subdirectory(include)
 
 install(TARGETS diagrams EXPORT diagrams FILE_SET headers)
 
-export(TARGETS diagrams NAMESPACE diagrams FILE diagrams.cmake)
+export(TARGETS diagrams NAMESPACE diagrams:: FILE diagrams.cmake)
 
-add_executable(diagrams_exe main.cpp)
+install(EXPORT diagrams NAMESPACE diagrams:: DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/cmake/diagrams)
 
-target_link_libraries(diagrams_exe PUBLIC diagrams)
+add_subdirectory(src)
 
-set_target_properties(diagrams_exe PROPERTIES INSTALL_RPATH_LINK_PATH ON)
-set_target_properties(
-    diagrams_exe PROPERTIES BUILD_RPATH "${CMAKE_BUILD_RPATH}"
-                         INSTALL_RPATH "${CMAKE_INSTALL_RPATH};${CMAKE_INSTALL_LIBDIR}"
-  )
+configure_package_config_file(cmake/diagrams-config.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/diagrams-config.cmake INSTALL_DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/cmake/diagrams)
 
-install(TARGETS diagrams_exe EXPORT diagrams_exe)
+write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/diagrams-config-version.cmake VERSION 1.0.0 COMPATIBILITY SameMajorVersion)
 
-install(EXPORT diagrams NAMESPACE diagrams DESTINATION share/diagrams)
-
-install(EXPORT diagrams_exe NAMESPACE diagrams DESTINATION share/diagrams)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/diagrams-config.cmake ${CMAKE_CURRENT_BINARY_DIR}/diagrams-config-version.cmake DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/cmake/diagrams)

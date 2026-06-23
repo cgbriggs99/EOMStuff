@@ -5,12 +5,12 @@
  *      Author: connor
  */
 
-#include <utils.hpp>
+#include <diagrams/utils.hpp>
 
 #include <string>
 #include <cctype>
 
-namespace psi::general_dlpno {
+namespace diagram {
 void to_upper(std::string *str) {
     for (auto &ch : *str) {
         ch = toupper(ch);
