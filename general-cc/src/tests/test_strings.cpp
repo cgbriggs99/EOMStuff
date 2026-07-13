@@ -73,3 +73,61 @@ TEST_CASE("Orbital Strings") {
         }
     }
 }
+
+TEST_CASE("Product Tables") {
+    auto[mults, prods] = generate_product_table(5, 2, 2);
+
+    SECTION("Check accuracy") {
+        einsums::Tensor < ptrdiff_t, 2 > expected_prods { "Expected products", 10, 10 };
+        einsums::Tensor<signed char, 2> expected_mults { "Expected mults", 10, 10 };
+
+        expected_mults.zero();
+        expected_prods.zero();
+
+        std::vector < ptrdiff_t > prods_data { 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 1, 0, 3, 0, 0, 0, 0, 0, 0, 1, 0, 0, 4, 0,
+                0, 0, 0, 0, 0, 0, 2, 3, 0, 0, 0, 0, 0, 0, 0, 2, 0, 4, 0, 0, 0, 0, 0, 0, 0, 3, 4, 0, 0, 0, 0, 1, 0, 2, 3, 0, 0, 0, 0, 0, 1,
+                0, 2, 0, 4, 0, 0, 0, 0, 1, 0, 0, 3, 4, 0, 0, 0, 0, 0, 2, 3, 4, 0, 0, 0, 0, 0, 0, 0 };
+        std::vector<signed char> mults_data { 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, -1, 0, 0, -1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0,
+                0, 1, 0, 0, 0, 0, -1, -1, 0, 0, -1, 0, 0, 0, 0, 1, 0, -1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0,
+                -1, 0, -1, 0, 1, 0, 0, 0, 0, 1, 0, 0, -1, -1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0 };
+
+        expected_prods.vector_data() = prods_data;
+        expected_mults.vector_data() = mults_data;
+
+        println (expected_prods);
+        println(prods);
+
+        println(expected_mults);
+        println(mults);
+
+        REQUIRE(mults.dim(0) == expected_mults.dim(0));
+        REQUIRE(mults.dim(1) == expected_mults.dim(1));
+        REQUIRE(prods.dim(0) == expected_prods.dim(0));
+        REQUIRE(prods.dim(1) == expected_prods.dim(1));
+
+        for (int i = 0; i < mults.dim(0); i++) {
+            for (int j = 0; j < mults.dim(1); j++) {
+                REQUIRE((prods(i, j) == expected_prods(i, j) || expected_mults(i, j) == 0));
+                REQUIRE(mults(i, j) == expected_mults(i, j));
+            }
+        }
+    }
+
+    SECTION("Check read/write") {
+        write_product_table(mults, prods, "test");
+
+        auto[mults2, prods2] = read_product_table("test");
+
+        REQUIRE(mults2.dim(0) == mults.dim(0));
+        REQUIRE(mults2.dim(1) == mults.dim(1));
+        REQUIRE(prods2.dim(0) == prods.dim(0));
+        REQUIRE(prods2.dim(1) == prods.dim(1));
+
+        for (int i = 0; i < prods.dim(0); i++) {
+            for (int j = 0; j < prods.dim(0); j++) {
+                REQUIRE(mults2(i, j) == mults(i, j));
+                REQUIRE(prods2(i, j) == prods(i, j));
+            }
+        }
+    }
+}

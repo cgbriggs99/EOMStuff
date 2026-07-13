@@ -50,39 +50,6 @@
 namespace psi {
 namespace general_dlpno {
 
-class PSI_API Theory {
-public:
-
-    enum TheoryType {
-        FULL, // This is full treatment of the given excitations.
-        PARENTHESIS,// This is full treatment of all excitations but the highest one. The highest is treated perturbatively through the Wigner 2n + 1 rule. This is the parenthesis formalism.
-        // When the order is 2, this gives MP2. That is, CC(D) is essentially MP2.
-        PERTURB// Treat all excitations but the highest at the last perturbative order that only includes the considered excitations. Treat the highest excitations at the first non-vanishing perturbative order.
-        // This is the CCn formalism. Singles are always treated exactly. CC2 treats doubles at 1st order. CC3 treats doubles at 3rd order, triples at 2nd order. CC4 treats doubles and triples at 4th order,
-        // quadruples at 3rd order.
-    };
-
-    Theory(std::string const &theory_str);
-
-    // 0 is hf. 1 is ccs if full, otherwise, it doesn't make sense. 2 is ccsd/mp2/cc2 depending on the type. 3 and up is what would be expected.
-    // 3 would be ccsdt/ccsd(t)/cc3, 4 would be ccsdtq/ccsdt(q)/cc4, etc.
-    constexpr Theory(unsigned int level, TheoryType type) : level_ {level}, type_ {type} {
-
-    }
-
-    constexpr unsigned int get_level() const {
-        return level_;
-    }
-    constexpr TheoryType get_type() const {
-        return type_;
-    }
-
-private:
-    unsigned int level_;
-
-    TheoryType type_;
-};
-
 class PSI_API GeneralDLPNO : public psi::dlpno::DLPNO {
 public:
     GeneralDLPNO(psi::SharedWavefunction ref_wfn, psi::Options &options);

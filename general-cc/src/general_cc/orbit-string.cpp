@@ -5,14 +5,25 @@
  *      Author: connor
  */
 
+#include <Einsums/Errors/Error.hpp>
+#include <Einsums/Tensor/Tensor.hpp>
+#include <Einsums/Profile/LabeledSection.hpp>
+#include <Einsums/Print.hpp>
 #include <general_cc/orbit-string.hpp>
 #include <general_cc/utils.hpp>
+#include "psi4/libmints/wavefunction.h"
+#include "psi4/liboptions/liboptions.h"
+#include "psi4/libpsi4util/PsiOutStream.h"
+#include "psi4/libpsio/psio.hpp"
+#include "psi4/libqt/qt.h"
+#include "psi4/psi4-dec.h"
 #include <vector>
 #include <map>
 #include <sstream>
 #include <string>
 #include <memory>
 #include <limits>
+#include <utility>
 
 namespace psi::general_cc {
 
@@ -181,6 +192,10 @@ OrbitString& OrbitString::operator=(OrbitString const &other) {
 OrbitString& OrbitString::operator=(OrbitString &&other) {
     if (!other.sanity_check()) {
         throw std::runtime_error("Moving a malformed orbit string!");
+    }
+
+    if (indices_ != nullptr) {
+        delete[] indices_;
     }
 
     length_ = other.get_num_indices();
@@ -414,6 +429,258 @@ bool operator==(OrbitString const &left, OrbitString const &right) {
     }
 
     return true;
+}
+
+void product(OrbitString const &left, OrbitString const &right, OrbitString *out, int *sign) {
+    //timer_on("Finding orbit string product");
+    // Check that we can combine these strings.
+    if (left.get_spin() != right.get_spin()) {
+        EINSUMS_THROW_EXCEPTION(std::logic_error, "Can not combine orbital strings. They have different spins!");
+    }
+    if (left.get_max_orbital() != right.get_max_orbital()) {
+        EINSUMS_THROW_EXCEPTION(std::logic_error, "Can not combine orbital strings. They seem to come from different spaces!");
+    }
+    // Trivial cases that may break things later.
+    if (left.get_num_indices() == 0) {
+        *out = right;
+        *sign = 1;
+        //timer_off("Finding orbit string product");
+        return;
+    }
+    if (right.get_num_indices() == 0) {
+        *out = left;
+        *sign = 1;
+        //timer_off("Finding orbit string product");
+        return;
+    }
+
+    // We are going to assume that the sizes of the orbit strings are small, and so we can use bubble sort.
+    char parity = 1;
+
+    unsigned short len = left.get_num_indices() + right.get_num_indices();
+
+    static_assert(std::is_same_v<decltype(len), unsigned short>);
+
+    OrbitString temp { len, left.get_max_orbital(), left.get_spin() };
+
+    // Initialize the temporary string.
+    for (unsigned short i = 0; i < left.get_num_indices(); i++) {
+        temp.get_index(i) = left.get_index(i);
+    }
+
+    for (unsigned short j = 0; j < right.get_num_indices(); j++) {
+        temp.get_index(left.get_num_indices() + j) = right.get_index(j);
+    }
+
+    // Bubble sort.
+    bool finished = true;
+
+    do {
+        finished = true;
+
+        for (unsigned short i = 0; i < temp.get_num_indices() - 1; i++) {
+            if (temp.get_index(i) == temp.get_index(i + 1)) {
+                *out = OrbitString(temp.get_num_indices(), temp.get_max_orbital(), temp.get_spin());
+                *sign = 0;
+                return;
+            }
+
+            if (temp.get_index(i) > temp.get_index(i + 1)) {
+                std::swap(temp.get_index(i), temp.get_index(i + 1));
+                parity *= -1;
+                finished = false;
+            }
+        }
+
+    } while (!finished);
+
+    *out = std::move(temp);
+    *sign = parity;
+
+    //timer_off("Finding orbit string product");
+}
+
+void write_product_table(einsums::Tensor<signed char, 2> const &multipliers, einsums::Tensor<ptrdiff_t, 2> const &products,
+        std::string const &base_name) {
+    //timer_on("Writing product tables");
+    std::FILE *index_file = std::fopen((base_name + ".indices.tensor").c_str(), "wb+");
+
+    if (index_file == nullptr) {
+        EINSUMS_THROW_EXCEPTION(std::runtime_error, "Could not open file {}", base_name + ".indices.tensor");
+    }
+
+    size_t left_size = multipliers.dim(0), right_size = multipliers.dim(1);
+
+    size_t success = std::fwrite(&left_size, sizeof(size_t), 1, index_file);
+
+    if (success < 1) {
+        EINSUMS_THROW_EXCEPTION(std::runtime_error, "Could only write {} items to index file when trying to write {} items.", success, 1);
+    }
+
+    success = std::fwrite(&right_size, sizeof(size_t), 1, index_file);
+
+    if (success < 1) {
+        EINSUMS_THROW_EXCEPTION(std::runtime_error, "Could only write {} items to index file when trying to write {} items.", success, 1);
+    }
+
+    success = std::fwrite(products.data(), sizeof(size_t), products.size(), index_file);
+
+    if (success < products.size()) {
+        EINSUMS_THROW_EXCEPTION(std::runtime_error, "Could only write {} items to index file when trying to write {} items.", success,
+                products.size());
+    }
+
+    std::fclose(index_file);
+
+    std::FILE *mult_file = std::fopen((base_name + ".mults.tensor").c_str(), "wb+");
+
+    if (mult_file == nullptr) {
+        EINSUMS_THROW_EXCEPTION(std::runtime_error, "Could not open file {}", base_name + ".mults.tensor");
+    }
+
+    success = std::fwrite(&left_size, sizeof(size_t), 1, mult_file);
+
+    if (success < 1) {
+        EINSUMS_THROW_EXCEPTION(std::runtime_error, "Could only write {} items to multiplier file when trying to write {} items.", success,
+                1);
+    }
+
+    success = std::fwrite(&right_size, sizeof(size_t), 1, mult_file);
+
+    if (success < 1) {
+        EINSUMS_THROW_EXCEPTION(std::runtime_error, "Could only write {} items to multiplier file when trying to write {} items.", success,
+                1);
+    }
+
+    success = std::fwrite(multipliers.data(), sizeof(signed char), multipliers.size(), mult_file);
+
+    if (success < multipliers.size()) {
+        EINSUMS_THROW_EXCEPTION(std::runtime_error, "Could only write {} items to multiplier file when trying to write {} items.", success,
+                multipliers.size());
+    }
+
+    std::fclose(mult_file);
+
+    //timer_off("Writing product tables");
+}
+
+std::pair<einsums::Tensor<signed char, 2>, einsums::Tensor<ptrdiff_t, 2>> read_product_table(std::string const &base_name) {
+    //timer_on("Reading product tables");
+    std::FILE *index_file = std::fopen((base_name + ".indices.tensor").c_str(), "rb");
+
+    if (index_file == nullptr) {
+        EINSUMS_THROW_EXCEPTION(std::runtime_error, "Could not open file {}", base_name + ".indices.tensor");
+    }
+
+    size_t left_size, right_size;
+
+    size_t success = std::fread(&left_size, sizeof(size_t), 1, index_file);
+
+    if (success < 1) {
+        EINSUMS_THROW_EXCEPTION(std::runtime_error, "Could only read {} items from index file when trying to read {} items.", success, 1);
+    }
+
+    success = std::fread(&right_size, sizeof(size_t), 1, index_file);
+
+    if (success < 1) {
+        EINSUMS_THROW_EXCEPTION(std::runtime_error, "Could only read {} items from index file when trying to read {} items.", success, 1);
+    }
+
+    einsums::Tensor < ptrdiff_t, 2 > products { "Products", left_size, right_size };
+
+    success = std::fread(products.data(), sizeof(size_t), products.size(), index_file);
+
+    if (success < products.size()) {
+        EINSUMS_THROW_EXCEPTION(std::runtime_error, "Could only read {} items from index file when trying to read {} items.", success,
+                products.size());
+    }
+
+    std::fclose(index_file);
+
+    std::FILE *mult_file = std::fopen((base_name + ".mults.tensor").c_str(), "rb");
+
+    if (index_file == nullptr) {
+        EINSUMS_THROW_EXCEPTION(std::runtime_error, "Could not open file {}", base_name + ".mults.tensor");
+    }
+
+    success = std::fread(&left_size, sizeof(size_t), 1, index_file);
+
+    if (success < 1) {
+        EINSUMS_THROW_EXCEPTION(std::runtime_error, "Could only read {} items from multiplier file when trying to read {} items.", success,
+                1);
+    }
+
+    success = std::fread(&right_size, sizeof(size_t), 1, index_file);
+
+    if (success < 1) {
+        EINSUMS_THROW_EXCEPTION(std::runtime_error, "Could only read {} items from multiplier file when trying to read {} items.", success,
+                1);
+    }
+
+    einsums::Tensor<signed char, 2> multipliers { "Multipliers", left_size, right_size };
+
+    success = std::fread(multipliers.data(), sizeof(signed char), multipliers.size(), mult_file);
+
+    if (success < multipliers.size()) {
+        EINSUMS_THROW_EXCEPTION(std::runtime_error, "Could only read {} items from multiplier file when trying to read {} items.", success,
+                multipliers.size());
+    }
+
+    std::fclose(mult_file);
+
+    //timer_off("Reading product tables");
+    return {multipliers, products};
+
+}
+
+std::pair<einsums::Tensor<signed char, 2>, einsums::Tensor<ptrdiff_t, 2>> generate_product_table(unsigned short max_orbital, // @suppress("Type cannot be resolved")
+        unsigned short left_len, unsigned short right_len) {
+
+    //timer_on("Creating product tables");
+
+    size_t num_left = OrbitString::number_of_strings(left_len, max_orbital), num_right = OrbitString::number_of_strings(right_len,
+            max_orbital);
+
+    einsums::Tensor<signed char, 2> multipliers { "Multipliers", num_left, num_right };
+    einsums::Tensor < ptrdiff_t, 2 > products { "Products", num_left, num_right };
+
+    OrbitString temp { static_cast<unsigned short>(left_len + right_len), max_orbital, OrbitString::ALPHA };
+
+    size_t prev_index = 0;
+    OrbitString left { left_len, max_orbital, OrbitString::ALPHA };
+    for (size_t left_index = 0; left_index < num_left; left_index++) {
+        OrbitString right { right_len, max_orbital, OrbitString::ALPHA };
+        for (size_t right_index = 0; right_index < num_right; right_index++) {
+            int sign = 0;
+
+            product(left, right, &temp, &sign);
+
+            multipliers(left_index, right_index) = (signed char) sign;
+
+            // We use the previous index if the sign is zero. This is because we can't necessarily generate
+            // a good index in these cases. Keeping the index as the previous one will help to improve
+            // cache performance, while setting to zero will make it so that we constantly reference the
+            // first cache line of our tensors, violating cache locality.
+            size_t curr_index = prev_index;
+            if (sign != 0) {
+                curr_index = temp.to_index();
+            }
+            products(left_index, right_index) = curr_index;
+            prev_index = curr_index;
+
+            if (right_index != num_right - 1) {
+                ++right;
+            }
+        }
+
+        if (left_index != num_left - 1) {
+            ++left;
+        }
+    }
+
+    //timer_off("Creating product tables");
+
+    return {multipliers, products};
 }
 
 }

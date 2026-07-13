@@ -95,3 +95,49 @@ psi4.driver.procedures['energy']['general_cc'] = run_general_cc
 def exampleFN():
     # Your Python code goes here
     pass
+
+
+def generate_set(level, l, n, k, prev = None) :
+    out = []
+    bound1 = min(level, l)
+    if prev is not None :
+        bound1 = min(bound1, prev[0])
+    for m1 in range(0, bound1 + 1) :
+        bound2 = min(m1, n)
+        if prev is not None and m1 == prev[0]:
+            bound2 = min(bound2, prev[1])
+        for m2 in range(0, bound2 + 1) :
+            bound3 = min(m2, k)
+            if prev is not None and m1 == prev[0] and m2 == prev[1] :
+                bound3 = min(bound3, prev[2])
+            for m3 in range(0, bound3 + 1) :
+                add = [(m1, m2, m3)]
+                if l - m1 == 0 and n - m2 == 0 and k - m3 == 0 :
+                    out.append(add)
+                else :
+                    new_list = generate_set(level, l - m1, n - m2, k - m3)
+                    for elem in new_list :
+                        out.append(add + elem)
+    return out
+
+
+
+def generate_density(level, particles) :
+    out = {}
+    for num_part_an in range(0, particles + 1) :
+        for num_hole_an in range(0, particles + 1) :
+            elements = {}
+            n = num_part_an + num_hole_an
+            k = num_part_an
+            num_part_cr = particles - num_hole_an
+            num_hole_cr = particles - num_part_an
+            m = min(num_part_cr, num_hole_cr)
+            for lam in range(max(1, m + n - 2 * min(n - k, k)), level + 1) :
+                lam_excess = lam - m - n + 2 * min(n - k, k)
+                
+                elements[(lam, lam_excess)] = generate_set(level, lam_excess, n, k)
+            out[f"{num_part_cr}pc,{num_hole_an}ha,{num_hole_cr}hc,{num_part_an}pa"] = elements
+    return out
+
+
+

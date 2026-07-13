@@ -14,8 +14,12 @@ namespace diagram {
 std::string triple_string(triplet const &triple, int start_i, int start_a, int start_m, int start_e) {
 
     std::ostringstream out;
-    if (std::get < 0 > (triple) > 0) {
-        out << "t(";
+    if (std::get < 0 > (triple) != 0) {
+        if (std::get < 0 > (triple) > 0) {
+            out << "t(";
+        } else {
+            out << "r(";
+        }
 
         int internal_lines = std::get < 1 > (triple);
 
@@ -297,6 +301,43 @@ std::string LambdaDiagram::to_string() const {
     }
 
     return out.str();
+}
+
+FactoredDiagram::FactoredDiagram(std::list<Diagram> const &diagrams) : curr_triple_ { 0, 0, 0 } {
+    for (auto diagram : diagrams) {
+        add_diagram(diagram);
+    }
+}
+
+FactoredDiagram::FactoredDiagram(int level) : level_ { level } {
+}
+
+void FactoredDiagram::add_diagram(Diagram const &diagram) {
+    bool found = false;
+
+    if (level_ >= 3) {
+        leaves_.push_back(diagram);
+        return;
+    }
+
+    if (diagram.get(level_) == triplet { 0, 0, 0 }) {
+        leaves_.push_back(diagram);
+        return;
+    }
+
+    for (auto &branch : branches_) {
+        if (branch.get_triplet() == diagram.get(level_)) {
+            branch.add_diagram(diagram);
+            found = true;
+            break;
+        }
+    }
+
+    if (!found) {
+        auto &new_factor = branches_.emplace_back(level_ + 1);
+
+        new_factor.add_diagram(diagram);
+    }
 }
 
 } // namespace diagram

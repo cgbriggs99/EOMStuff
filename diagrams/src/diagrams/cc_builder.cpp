@@ -106,9 +106,6 @@ std::list<Diagram> compute_ccn_residual(int residual, int max_excitation, bool s
 
 std::list<Diagram> compute_ccp_residual(int residual, int max_excitation, bool skip_t1, bool canonical) {
     if (residual < max_excitation) {
-        if (max_excitation == 2) {
-            return compute_cc_residual(residual, max_excitation, skip_t1, canonical);
-        }
         return compute_cc_residual(residual, max_excitation - 1, skip_t1, canonical);
     } else {
         std::list<Diagram> out;

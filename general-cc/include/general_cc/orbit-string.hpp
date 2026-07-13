@@ -14,6 +14,8 @@
 #include "psi4/libmints/wavefunction.h"
 #include "psi4/libpsio/psio.hpp"
 
+#include <Einsums/Tensor.hpp>
+
 #include <vector>
 #include <string>
 
@@ -134,6 +136,16 @@ bool operator==(OrbitString const &left, OrbitString const &right);
 inline bool operator!=(OrbitString const &left, OrbitString const &right) {
     return !(left == right);
 }
+
+void product(OrbitString const &left, OrbitString const &right, OrbitString *out, int *sign);
+
+void write_product_table(einsums::Tensor<signed char, 2> const &multipliers, einsums::Tensor<ptrdiff_t, 2> const &products,
+        std::string const &base_name);
+
+std::pair<einsums::Tensor<signed char, 2>, einsums::Tensor<ptrdiff_t, 2>> read_product_table(std::string const &base_name);
+
+std::pair<einsums::Tensor<signed char, 2>, einsums::Tensor<ptrdiff_t, 2>> generate_product_table(unsigned short max_orbital,
+        unsigned short left_len, unsigned short right_len);
 
 }
 }

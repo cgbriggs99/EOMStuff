@@ -1,4 +1,5 @@
-target_sources(diagrams PRIVATE diagrams/diagram.cpp diagrams/theory-input.cpp diagrams/utils.cpp diagrams/interaction_generators.cpp diagrams/cc_builder.cpp)
+target_sources(diagrams PRIVATE diagrams/diagram.cpp diagrams/theory-input.cpp 
+	diagrams/utils.cpp diagrams/interaction_generators.cpp diagrams/cc_builder.cpp)
 
 add_executable(diagrams_exe main.cpp)
 
