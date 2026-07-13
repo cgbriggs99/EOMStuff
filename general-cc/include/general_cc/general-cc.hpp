@@ -22,6 +22,7 @@
 #include <Einsums/Tensor/DiskTensor.hpp>
 
 #include <vector>
+#include <list>
 
 // My editor is complaining. This should be a no-op in real contexts.
 #ifndef PSI_API
@@ -30,6 +31,9 @@
 
 namespace psi {
 namespace general_cc {
+
+// How large the blocks should be when reading in disk tensors.
+constexpr int block_size = 512;
 
 namespace detail {
 struct PSI_API FullIntegrals {
@@ -56,7 +60,7 @@ struct PSI_API FullIntegrals {
 struct PSI_API DFIntegrals {
     // No restrictions on orbitals. This is because one index comes from the bra, one from the ket,
     // and Q is the auxiliary. Maybe I'll add other sorting forms of these.
-    std::shared_ptr<einsums::Tensor<double, 3>> B_abQ, B_aiQ, B_iaQ, B_ijQ;
+    std::shared_ptr<einsums::Tensor<double, 3>> B_Qab, B_Qai, B_Qia, B_Qij;
     size_t naux;
 };
 
@@ -86,8 +90,19 @@ protected:
 
     void tei_ao_to_antisym_so(std::shared_ptr<MintsHelper> mintshelper);
 
-    static std::pair<einsums::Tensor<signed char, 2>, einsums::Tensor<ptrdiff_t, 2>> get_product_table(int nleft, int nright,
-            int norbs) const;
+    void contract_interaction(diagram::triplet const &amps_spec, diagram::Interaction interaction, einsums::DiskTensor<double, 2> &scaled_t,
+            einsums::DiskTensor<double, 2> *out) const;
+
+    void contract_with_intermediate(diagram::triplet const &amps_spec, einsums::Tensor<double, 2> const &intermediate,
+            einsums::DiskTensor<double, 2> *out) const;
+
+    void contract(diagram::FactoredDiagram const &diagrams, einsums::DiskTensor<double, 2> *out) const;
+
+    double energy_contract(diagram::Diagram const &diagram) const;
+
+    void resolvent_contract(int num_inds, einsums::DiskTensor<double, 2> *residual) const;
+
+    static std::pair<einsums::Tensor<signed char, 2>, einsums::Tensor<ptrdiff_t, 2>> get_product_table(int nleft, int nright, int norbs);
 
     diagram::Theory theory_;
 
@@ -102,7 +117,7 @@ protected:
 
     std::shared_ptr<einsums::Tensor<double, 2>> t1_F_ab_, t1_F_ij_, t1_F_ia_, t1_F_ai_;
 
-    std::shared_ptr<einsums::Tensor<double, 1>> mo_energies_a_, mo_energies_b_;
+    std::shared_ptr<einsums::Tensor<double, 1>> mo_energies_a_, mo_energies_b_, mo_energies_o_, mo_energies_v_;
 
     union {
         detail::FullIntegrals *full { nullptr };
