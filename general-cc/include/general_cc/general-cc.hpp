@@ -90,6 +90,39 @@ protected:
 
     void tei_ao_to_antisym_so(std::shared_ptr<MintsHelper> mintshelper);
 
+    void contract_Fab(diagram::triplet const &amps_spec, einsums::DiskTensor<double, 2> &scaled_t,
+            einsums::DiskTensor<double, 2> *out) const;
+
+    void contract_Fij(diagram::triplet const &amps_spec, einsums::DiskTensor<double, 2> &scaled_t,
+            einsums::DiskTensor<double, 2> *out) const;
+
+    void contract_Fia(diagram::triplet const &amps_spec, einsums::DiskTensor<double, 2> &scaled_t,
+            einsums::DiskTensor<double, 2> *out) const;
+
+    void contract_Wabcd(diagram::triplet const &amps_spec, einsums::DiskTensor<double, 2> &scaled_t,
+            einsums::DiskTensor<double, 2> *out) const;
+
+    void contract_Wijkl(diagram::triplet const &amps_spec, einsums::DiskTensor<double, 2> &scaled_t,
+                einsums::DiskTensor<double, 2> *out) const;
+
+    void contract_Wiajb(diagram::triplet const &amps_spec, einsums::DiskTensor<double, 2> &scaled_t,
+                einsums::DiskTensor<double, 2> *out) const;
+
+    void contract_Wiabc(diagram::triplet const &amps_spec, einsums::DiskTensor<double, 2> &scaled_t,
+                einsums::DiskTensor<double, 2> *out) const;
+
+    void contract_Wijak(diagram::triplet const &amps_spec, einsums::DiskTensor<double, 2> &scaled_t,
+                einsums::DiskTensor<double, 2> *out) const;
+
+    void contract_Wabic(diagram::triplet const &amps_spec, einsums::DiskTensor<double, 2> &scaled_t,
+                einsums::DiskTensor<double, 2> *out) const;
+
+    void contract_Waijk(diagram::triplet const &amps_spec, einsums::DiskTensor<double, 2> &scaled_t,
+                einsums::DiskTensor<double, 2> *out) const;
+
+    void contract_Wijab(diagram::triplet const &amps_spec, einsums::DiskTensor<double, 2> &scaled_t,
+                einsums::DiskTensor<double, 2> *out) const;
+
     void contract_interaction(diagram::triplet const &amps_spec, diagram::Interaction interaction, einsums::DiskTensor<double, 2> &scaled_t,
             einsums::DiskTensor<double, 2> *out) const;
 
