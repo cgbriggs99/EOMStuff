@@ -1,0 +1,190 @@
+\documentclass{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{mathtools}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{longtable}
+
+\newcommand{\tei}[2]{\left<{#1}\middle|\middle|{#2}\right>}
+\newcommand{\ttau}{\tilde{\tau}}
+
+\begin{document}
+
+\section{General Order CC(n)}
+
+Based on the work of K\'allay and Surj\'an, the following in table~\ref{diagrams} can be identified as possible diagram combinations. Note that I zero index the interactions to align with the conventions of the C programming language, as opposed to the Fortran programming language used by the authors of the original paper. Also, $n$ will be the given residual level. The zeroth residual is the energy. All variables are limited by the highest excitation operator being considered.
+
+  \begin{longtable}{cccccc}
+    \multicolumn{4}{c}{Amplitude triplets} & Interaction & Restrictions\\
+    \hline
+    \multicolumn{6}{c}{0: $f_{ab}$}\\
+    \hline
+    X11 & 000 & 000 & 000 & 0 & $X = n$\\
+    \hline
+    \multicolumn{6}{c}{1: $f_{ij}$}\\
+    \hline
+    X10 & 000 & 000 & 000 & 1 & $X = n$\\
+    \hline
+    \multicolumn{6}{c}{2: $f_{ia}$}\\
+    \hline
+    X21 & 000 & 000 & 000 & 2 & $X = n + 1$\\
+    X11 & Y10 & 000 & 000 & 2 & $X + Y = n + 1, X \ge Y$\\
+    X10 & Y11 & 000 & 000 & 2 & $X + Y = n + 1, X > Y$\\
+    \hline
+    \multicolumn{6}{c}{3: $\tei{ab}{cd}$}\\
+    \hline
+    X22 & 000 & 000 & 000 & 3 & $X = n$\\
+    X11 & Y11 & 000 & 000 & 3 & $X + Y = n, X \ge Y$\\
+    \hline
+    \multicolumn{6}{c}{4: $\tei{ij}{kl}$}\\
+    \hline
+    X20 & 000 & 000 & 000 & 4 & $X = n$\\
+    X10 & Y10 & 000 & 000 & 4 & $X + Y = n, X\ge Y$\\
+    \hline
+    \multicolumn{6}{c}{5: $\tei{ia}{jb}$}\\
+    \hline
+    X21 & 000 & 000 & 000 & 5 & $X = n$\\
+    X11 & Y10 & 000 & 000 & 5 & $X + Y = n, X \ge Y$\\
+    X10 & Y11 & 000 & 000 & 5 & $X + Y = n, X > Y$\\
+    \hline
+    \multicolumn{6}{c}{6: $\tei{ia}{bc}$}\\
+    \hline
+    X32 & 000 & 000 & 000 & 6 & $X = n + 1$\\
+    X22 & Y10 & 000 & 000 & 6 & $X + Y = n + 1, X \ge Y$\\
+    X10 & Y22 & 000 & 000 & 6 & $X + Y = n + 1, X > Y$\\
+    X21 & Y11 & 000 & 000 & 6 & $X + Y = n + 1, X \ge Y$\\
+    X11 & Y21 & 000 & 000 & 6 & $X + Y = n + 1, X > Y$\\
+    X11 & Y11 & Z10 & 000 & 6 & $X + Y + Z = n + 1, X \ge Y \ge Z$\\
+    X11 & Y10 & Z11 & 000 & 6 & $X + Y + Z = n + 1, X \ge Y > Z$\\
+    X10 & Y11 & Z11 & 000 & 6 & $X + Y + Z = n + 1, X > Y \ge Z$\\
+    \hline
+    \multicolumn{6}{c}{7: $\tei{ij}{ak}$}\\
+    \hline
+    X31 & 000 & 000 & 000 & 7 & $X = n + 1$\\
+    X21 & Y10 & 000 & 000 & 7 & $X + Y = n + 1, X \ge Y$\\
+    X10 & Y21 & 000 & 000 & 7 & $X + Y = n + 1, X > Y$\\
+    X20 & Y11 & 000 & 000 & 7 & $X + Y = n + 1, X \ge Y$\\
+    X11 & Y20 & 000 & 000 & 7 & $X + Y = n + 1, X > Y$\\
+    X11 & Y10 & Z10 & 000 & 7 & $X + Y + Z = n + 1, X \ge Y \ge Z$\\
+    X10 & Y11 & Z10 & 000 & 7 & $X + Y + Z = n + 1, X > Y \ge Z$\\
+    X10 & Y10 & Z11 & 000 & 7 & $X + Y + Z = n + 1, X \ge Y > Z$\\
+    \hline
+    \multicolumn{6}{c}{8: $\tei{ab}{ic}$}\\
+    \hline
+    X11 & 000 & 000 & 000 & 8 & $X = n - 1$\\
+    \hline
+    \multicolumn{6}{c}{9: $\tei{ai}{jk}$}\\
+    \hline
+    X10 & 000 & 000 & 000 & 9 & $X = n - 1$\\
+    \hline
+    \multicolumn{6}{c}{10: $\tei{ij}{ab}$}\\
+    \hline
+    X42 & 000 & 000 & 000 & 10 & $X = n + 2$\\
+    X32 & Y10 & 000 & 000 & 10 & $X + Y = n + 2, X \ge Y$\\
+    X10 & Y32 & 000 & 000 & 10 & $X + Y = n + 2, X > Y$\\
+    X31 & Y11 & 000 & 000 & 10 & $X + Y = n + 2, X \ge Y$\\
+    X11 & Y31 & 000 & 000 & 10 & $X + Y = n + 2, X > Y$\\
+    X22 & Y20 & 000 & 000 & 10 & $X + Y = n + 2, X \ge Y$\\
+    X20 & Y22 & 000 & 000 & 10 & $X + Y = n + 2, X > Y$\\
+    X21 & Y21 & 000 & 000 & 10 & $X + Y = n + 2, X \ge Y$\\
+    X22 & Y10 & Z10 & 000 & 10 & $X + Y + Z = n + 2, X \ge Y \ge Z$\\
+    X10 & Y22 & Z10 & 000 & 10 & $X + Y + Z = n + 2, X > Y \ge Z$\\
+    X10 & Y10 & Z22 & 000 & 10 & $X + Y + Z = n + 2, X \ge Y > Z$\\
+    X21 & Y11 & Z10 & 000 & 10 & $X + Y + Z = n + 2, X \ge Y \ge Z$\\
+    X21 & Y10 & Z11 & 000 & 10 & $X + Y + Z = n + 2, X \ge Y > Z$\\
+    X10 & Y11 & Z21 & 000 & 10 & $X + Y + Z = n + 2, X > Y > Z$\\
+    X10 & Y21 & Z11 & 000 & 10 & $X + Y + Z = n + 2, X > Y \ge Z$\\
+    X11 & Y21 & Z10 & 000 & 10 & $X + Y + Z = n + 2, X > Y \ge Z$\\
+    X11 & Y10 & Z21 & 000 & 10 & $X + Y + Z = n + 2, X \ge Y > Z$\\
+    X20 & Y11 & Z11 & 000 & 10 & $X + Y + Z = n + 2, X \ge Y \ge Z$\\
+    X11 & Y20 & Z11 & 000 & 10 & $X + Y + Z = n + 2, X > Y \ge Z$\\
+    X11 & Y11 & Z20 & 000 & 10 & $X + Y + Z = n + 2, X \ge Y > Z$\\
+    X11 & Y11 & Z10 & W10 & 10 & $X + Y + Z + W = n + 2, X \ge Y \ge Z \ge W$\\
+    X11 & Y10 & Z11 & W10 & 10 & $X + Y + Z + W = n + 2, X \ge Y > Z \ge W$\\
+    X11 & Y10 & Z10 & W11 & 10 & $X + Y + Z + W = n + 2, X \ge Y \ge Z > W$\\
+    X10 & Y11 & Z11 & W10 & 10 & $X + Y + Z + W = n + 2, X > Y \ge Z \ge W$\\
+    X10 & Y11 & Z10 & W11 & 10 & $X + Y + Z + W = n + 2, X > Y \ge Z > W$\\
+    X10 & Y10 & Z11 & W11 & 10 & $X + Y + Z + W = n + 2, X \ge Y > Z \ge W$\\
+    \hline
+    \multicolumn{6}{c}{11: $f_{ai}$}\\
+    \hline
+    000 & 000 & 000 & 000 & 11 & $n = 1$\\
+    \hline
+    \multicolumn{6}{c}{12: $\tei{ab}{ij}$}\\
+    \hline
+    000 & 000 & 000 & 000 & 12 & $n = 2$\\
+  \caption{All possible diagram specifications for standard coupled-cluster. Here, $n$ is the order of the residual, with $n = 0$ giving the variational energy, $n = 1$ giving the singles residual, and so on.}
+  \label{diagrams}
+\end{longtable}
+
+\section{General Order CCn}
+
+For general order CCn, we use exact singles and for every amplitude, we expand up to the first time that $T_n$ appears in its expression. In particular, the $T_n$ amplitude is expanded to the $n - 1$ order, which is the first non-vanishing perturbative order. From here, we treat singles as zeroth order, as opposed to second order. This is equivalent to performing the $T_1$ transform, which has the side effect of making $\overline{F} = e^{-\hat{T}_1}\hat{F}e^{\hat{T}_1}$ first order, while $\hat{F}$ is zeroth order. This means that we get the resolvent for free, but we have to wait a level before the two-electron component of the $\overline{F}$ operator appears.
+
+\section{General Order LinCCn}
+
+For general order LinCCn, the restrictions are the same as for general order CC(n), but we only include diagrams with at most one amplitude. That is, for each operator in table~\ref{diagrams}, we only include the first entry, if possible.
+
+\section{General Order CC(n)(n + 1) and CC(n)[n + 1]}
+
+First, we need to define the amplitudes. The perturbative amplitudes are the same for both parenthesis and bracket methods. Note that $\hat{T}^{\left[1\right]} = \hat{T}_2^{\left[1\right]}$ while $\hat{T}^{\left[2\right]} = \hat{T}_1^{\left[2\right]} + \hat{T}_2^{\left[2\right]} + \hat{T}_3^{\left[2\right]}$ and for all others, $\hat{T}^{\left[n\right]} = \sum_{i = 1}^{n + 1} \hat{T}^{\left[n\right]}_{i}$.
+
+\begin{multline}
+  t_{I}^{A[n]} = \left<\Phi_I^A\middle|\left[\hat{V}, \hat{T}^{[n - 1]}\right] + \sum_{\substack{1\le i\le j \le n - 2 \\ i + j = n - 1}}\left[\left[\hat{V}, \hat{T}^{\left[i\right]}\right], \hat{T}^{\left[j\right]}\right] + \sum_{\substack{1\le i\le j\le k \le n - 3 \\ i + j + k = n - 1}} \left[\left[\left[\hat{V}, \hat{T}^{\left[i\right]}\right], \hat{T}^{\left[j\right]}\right], \hat{T}^{\left[k\right]}\right] \right.\\
+  \left.+ \sum_{\substack{1\le i \le j \le k \le l \le n - 4 \\ i + j + k + l = n - 1}}\left[\left[\left[\left[\hat{V}, \hat{T}^{\left[i\right]}\right], \hat{T}^{\left[j\right]}\right], \hat{T}^{\left[k\right]}\right], \hat{T}^{\left[l\right]}\right]\middle|\Phi_0\right>/\varepsilon_A^I
+\end{multline}
+
+The result of this is that we need to generate the diagrams where the total perturbation is order $n$. We also need to consider that the $\hat{V}$ operator increases the perturbation by 1 and that $\hat{T}_1$ amplitudes anomalously increase the order by at least 2. To get the amplitudes used for the bracket and parenthesis methods, we need to replace the perturbative amplitudes with the converged amplitudes and remove repeated combinations. That is, $\hat{T}^{\left[1\right]} = \hat{T}_2$, $\hat{T}^{\left[2\right]} = \hat{T}_1 + \hat{T}_2 + \hat{T}_3$, and $\hat{T}^{\left[n\right]} = \sum_{i = 1}^{n + 1} \hat{T}_i$. Alternatively, we can consider all combinations of amplitudes and the $\hat{V}$ operator where the amplitudes are treated as if they are their lowest possible order, the $\hat{V}$ operator is first order, and the total order must be less than or equal to $n$, as opposed to simply being equal to $n$. This latter version is much easier to implement, as we don't need to consider the cases where an amplitude is included at a higher perturbation level than expected.
+
+Once we have the amplitude expression, we can figure out the energy. We'll start with the bracket energy.
+
+\begin{equation}
+  \Delta E_{CC(n)[n + 1]} = \left<\Phi_0\middle|\hat{T}_2^\dagger\hat{V}\hat{R}_4^{\left[n + 1\right]}\middle|\Phi_0\right> + \left\{\begin{matrix}
+  0 & n \equiv 0\left(\mathrm{mod}2\right) \wedge n > 2\\
+  \left<\Phi_0\middle|\hat{T}_3^\dagger\hat{V}\hat{R}_5^{\left[n + 1\right]}\middle|\Phi_0\right> & \mathrm{else}
+  \end{matrix}\right.
+\end{equation}
+
+Here, we define the $\hat{R}_m^{\left[n + 1\right]}$ as follows.
+
+\begin{equation}
+  \hat{R}_m^{\left[n + 1\right]} = \left\{\begin{matrix}
+      \sum_{AI}\frac{\left<\Phi_I^A\middle|\hat{V}\left(\hat{R}_{m + 2}^{\left[n + 1\right]} + \hat{R}_{m + 1}^{\left[n + 1\right]}\right)\middle|\Phi_0\right>}{\varepsilon_A^I}\tilde{a}_I^A & m \equiv 0\left(\mathrm{mod} 2\right) \wedge n \equiv 0\left(\mathrm{mod} 2\right) \wedge m < n\\
+      \sum_{AI}\frac{\left<\Phi_{I}^{A}\middle|\hat{V}\hat{R}_{m + 2}^{\left[n + 1\right]}\middle|\Phi_0\right>}{\varepsilon_A^I}\tilde{a}_I^A & m \le n\\
+      T_{n + 1}^{\left[n\right]} & m > n
+    \end{matrix}\right.
+\end{equation}
+
+where $A$ and $I$ are lists of $m$ virtual  or occupied indices, $\varepsilon_A^I = \sum_{i \in I} \varepsilon_i - \sum_{a \in A} \varepsilon_a$ is the resolvent, built out of the Hartree-Fock orbital energies, and $\tilde{a}_I^A = \prod_{a\in A}a_a^\dagger\prod_{i\in I} a_i$ is a normal-ordered excitation operator. Next, the parenthesis energy.
+
+\begin{equation}
+  \Delta E_{CC(n)(n + 1)} = \left<\Phi_0\middle|\hat{T}^{\left[1\right]\dagger}\hat{V}\hat{R}_4^{\left(n + 1\right)}\middle|\Phi_0\right> + \left<\Phi_0\middle|\hat{T}^{\left[2\right]\dagger}\hat{V}\hat{R}_5^{\left(n + 1\right)}\middle|\Phi_0\right>
+\end{equation}
+
+Here, we define the $\hat{R}_m^{\left(n + 1\right)}$ in almost exactly the same way as $\hat{R}_m^{\left[n + 1\right]}$, only we don't care about the parity of $n$. Explicitly, 
+
+\begin{equation}
+  \hat{R}_m^{\left(n + 1\right)} = \left\{\begin{matrix}
+      \sum_{AI}\frac{\left<\Phi_I^A\middle|\hat{V}\left(\hat{R}_{m + 2}^{\left(n + 1\right)} + \hat{R}_{m + 1}^{\left(n + 1\right)}\right)\middle|\Phi_0\right>}{\varepsilon_A^I}\tilde{a}_I^A & m \equiv 0\left(\mathrm{mod} 2\right) \wedge m < n\\
+      \sum_{AI}\frac{\left<\Phi_{I}^{A}\middle|\hat{V}\hat{R}_{m + 2}^{\left(n + 1\right)}\middle|\Phi_0\right>}{\varepsilon_A^I}\tilde{a}_I^A & m \le n\\
+      T_{n + 1}^{\left[n\right]} & m > n
+    \end{matrix}\right.
+\end{equation}
+
+This means we have a few special cases. For CCSD(T), the energy expression gives the following.
+
+\begin{equation}
+  \Delta E_{CCSD(T)} = \left<\Phi_0\middle|\hat{T}_2^\dagger \hat{V}\hat{T}_3^{\left[2\right]}\middle|\Phi_0\right> + \left<\Phi_0\middle|\hat{T}_1^\dagger\hat{V}\hat{T}_3^{\left[2\right]}\middle|\Phi_0\right>
+\end{equation}
+
+Otherwise, when $n$ is even, $\Delta E_{CC(n)[n + 1]} = \Delta E_{CC(n)(n + 1)}$, and when $n$ is odd, the $\Delta E_{CC(n)[n + 1]}$ expression is included in the $\Delta E_{CC(n)(n + 1)}$ expression. Also, when $n$ is odd, the $\Delta E_{CC(n)[n + 1]}$ expression only contains a single term. Note that while this recurrence relation is written bottom-up, a good implementation will use the fact that the top-down approach can be factored to better reuse intermediates.
+
+\subsection{Lambda Corrections}
+
+The $\hat{T}^\dagger$ used in the parenthesis are only an approximation for the $\hat{\Lambda}$ operators. If we use the converged $\hat{\Lambda}$ operators instead, we get the CC(n)(n + 1)$_\Lambda$ methods. Note that the bracket expansion does not try to approximate the $\hat{\Lambda}$ operators, so we shouldn't try to replace them there. If we did, it would give the CC(n)(n + 1)$_\Lambda$ equations right back, meaning a hypothetical CC(n)[n + 1]$_\Lambda$ would be exactly the same as CC(n)(n + 1)$_\Lambda$ for all $n$, not just even $n$. Also note that there are no $\hat{\Lambda}$ equations for the perturbative amplitudes, meaning we can't go much further from here. This is because no amplitudes depend on the $\hat{T}^{\left[n\right]}$ operators, making it impossible to take a derivative by the $\hat{T}^{\left[n\right]}$ operators to generate the $\hat{\Lambda}^{\left[n\right]}$ residual. For property calculations, we can substitute $\hat{\Lambda}^{\left[n\right]} = \hat{T}^{\left[n\right]\dagger}$, but we won't capture any orbital relaxation effects due to the higher-order excitations. This also means that we can't perform EOM-CC(n)(n + 1) or EOM-CC(n)[n + 1]
+
+\end{document}
