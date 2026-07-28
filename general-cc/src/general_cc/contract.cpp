@@ -182,82 +182,62 @@ void GeneralCC::resolvent_contract(int num_inds, DiskTensor<double, 2> *residual
 }
 
 void GeneralCC::contract_interaction(diagram::triplet const &amps_spec, diagram::Interaction interaction,
-        einsums::DiskTensor<double, 2> &scaled_t, einsums::DiskTensor<double, 2> *out) const {
+        einsums::DiskTensor<double, 4> *out) const {
 
     switch (interaction) {
     case diagram::Fab:
-        contract_Fab(amps_spec, scaled_t, out);
+        contract_Fab(amps_spec, out);
         break;
     case diagram::Fji:
-        contract_Fij(amps_spec, scaled_t, out);
+        contract_Fij(amps_spec, out);
         break;
     case diagram::Fia:
-        contract_Fia(amps_spec, scaled_t, out);
+        contract_Fia(amps_spec, out);
         break;
     case diagram::Wadbc:
-        contract_Wabcd(amps_spec, scaled_t, out);
+        contract_Wabcd(amps_spec, out);
         break;
     case diagram::Wjkil:
-        contract_Wjkil(amps_spec, scaled_t, out);
+        contract_Wjkil(amps_spec, out);
         break;
     case diagram::Wjaib:
-        contract_Wiajb(amps_spec, scaled_t, out);
+        contract_Wiajb(amps_spec, out);
         break;
     case diagram::Wicab:
-        contract_Wiabc(amps_spec, scaled_t, out);
+        contract_Wiabc(amps_spec, out);
         break;
     case diagram::Wijak:
-        contract_Wijak(amps_spec, scaled_t, out);
+        contract_Wijak(amps_spec, out);
         break;
     case diagram::Wacib:
-        contract_Wabic(amps_spec, scaled_t, out);
+        contract_Wabic(amps_spec, out);
         break;
     case diagram::Wajik:
-        contract_Waijk(amps_spec, scaled_t, out);
+        contract_Waijk(amps_spec, out);
         break;
     case diagram::Wijab:
-        contract_Wijab(amps_spec, scaled_t, out);
+        contract_Wijab(amps_spec, out);
         break;
     case diagram::Fai:
-
-        auto const &Fai = (t1_transformed_)? *t1_F_ai_: *F_ai_;
-
-        for (size_t a_block = 0; a_block < nvirt_ / block_size; a_block++) {
-            for (size_t i_block = 0; i_block < nocc_ / block_size; i_block++) {
-                auto out_view = (*out)(Range { a_block * block_size, (a_block + 1) * block_size },
-                        Range { i_block * block_size, (i_block + 1) * block_size });
-
-                auto &out_tens = out_view.get();
-                out_tens = Fai(Range { a_block * block_size, (a_block + 1) * block_size },
-                        Range { i_block * block_size, (i_block + 1) * block_size });
-            }
-
-            auto out_view = (*out)(Range { a_block * block_size, (a_block + 1) * block_size },
-                    Range { (nocc_ / block_size) * block_size, (nocc_ / block_size) * block_size + nocc_ % block_size });
-
-            auto &out_tens = out_view.get();
-            out_tens = Fai(Range { a_block * block_size, (a_block + 1) * block_size },
-                    Range { (nocc_ / block_size) * block_size, (nocc_ / block_size) * block_size + nocc_ % block_size });
-        }
-
-        for (size_t i_block = 0; i_block < nocc_ / block_size; i_block++) {
-            auto out_view = (*out)(Range { (nvirt_ / block_size) * block_size, (nvirt_ / block_size) * block_size + nvirt_ % block_size },
-                    Range { i_block * block_size, (i_block + 1) * block_size });
-
-            auto &out_tens = out_view.get();
-            out_tens = Fai(Range { (nvirt_ / block_size) * block_size, (nvirt_ / block_size) * block_size + nvirt_ % block_size },
-                    Range { i_block * block_size, (i_block + 1) * block_size });
-        }
-
-        auto out_view = (*out)(Range { (nvirt_ / block_size) * block_size, (nvirt_ / block_size) * block_size + nvirt_ % block_size },
-                Range { (nocc_ / block_size) * block_size, (nocc_ / block_size) * block_size + nocc_ % block_size });
-
-        auto &out_tens = out_view.get();
-        out_tens = Fai(Range { (nvirt_ / block_size) * block_size, (nvirt_ / block_size) * block_size + nvirt_ % block_size },
-                Range { (nocc_ / block_size) * block_size, (nocc_ / block_size) * block_size + nocc_ % block_size });
+        contract_Fai(out);
         break;
     case diagram::Wabij:
         contract_Wabij(out);
         break;
     }
+
+}
+
+void GeneralCC::contract_with_intermediate(diagram::triplet const &amps_spec, einsums::DiskTensor<double, 4> const &intermediate,
+        einsums::DiskTensor<double, 4> *out, int Ao_inds, int Io_inds, int C_inds, int K_inds) const {
+    int At_inds, It_inds, B_inds, J_inds;
+    size_t num_At, num_Ao, num_It, num_Io, num_B, num_J, num_C, num_K;
+
+    // Special case when the amplitude is the T1.
+    if (std::get < 0 > (amps_spec) == 1) {
+
+    }
+}
+
+}
 

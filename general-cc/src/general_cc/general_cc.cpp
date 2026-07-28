@@ -8,6 +8,7 @@
 #include <general_cc/general-cc.hpp>
 #include <general_cc/tei_transform.hpp>
 #include <general_cc/orbit-string.hpp>
+#include <general_cc/utils.hpp>
 #include <Einsums/Tensor/Tensor.hpp>
 #include <Einsums/Tensor/DiskTensor.hpp>
 
@@ -105,24 +106,66 @@ GeneralCC::GeneralCC(diagram::Theory theory, SharedWavefunction ref_wfn, Options
 
     residual_expressions_ = std::vector < diagram::FactoredDiagram > (theory.get_level());
 
+    switch (theory.get_type()) {
+    case diagram::Theory::FULL:
+    case diagram::Theory::LINEAR:
+        tn_files_.reserve(theory.get_level() - 1);
+        tn_amps_.reserve(theory.get_level() - 1);
+        break;
+    case diagram::Theory::BRACKET:
+    case diagram::Theory::PARENTHESIS:
+    case diagram::Theory::PERTURB:
+        tn_files_.reserve(theory.get_level() - 2);
+        tn_amps_.reserve(theory.get_level() - 2);
+        break;
+    }
+
+    temp_file_ = h5::create("general_cc.intermediate.h5", H5F_ACC_TRUNC);
+
     for (int i = 0; i < theory.get_level(); i++) {
         if (i == 0 && theory.do_skip_singles() && !t1_transformed_) {
             continue;
         }
+        auto tn_name = std::fmt("general_cc.t{}.h5", i + 2);
         switch (theory.get_type()) {
         case diagram::Theory::FULL:
             residual_expressions_[i] = diagram::FactoredDiagram(
                     diagram::compute_cc_residual(i + 1, theory.get_level(), theory.do_skip_singles() || t1_transformed_, t1_transformed_));
+
+            if (i != 0) {
+                tn_files_.push_back(h5::create(tn_name, H5_ACC_TRUNC));
+                tn_amps_.push_back(
+                        DiskTensor<double, 2>(tn_name, OrbitString::number_of_strings(i + 1, nvirt_),
+                                OrbitString::number_of_strings(i + 1, nocc_)));
+            }
             break;
         case diagram::Theory::PERTURB:
             residual_expressions_[i] = diagram::FactoredDiagram(diagram::compute_ccn_residual(i + 1, theory.get_level(), true, false));
+            if (i != 0 && i != theory.get_level() - 1) {
+                tn_files_.push_back(h5::create(tn_name, H5_ACC_TRUNC));
+                tn_amps_.push_back(
+                        DiskTensor<double, 2>(tn_name, OrbitString::number_of_strings(i + 1, nvirt_),
+                                OrbitString::number_of_strings(i + 1, nocc_)));
+            }
             break;
         case diagram::Theory::BRACKET:
         case diagram::Theory::PARENTHESIS:
+            if (i != 0 && i != theory.get_level() - 1) {
+                tn_files_.push_back(h5::create(tn_name, H5_ACC_TRUNC));
+                tn_amps_.push_back(
+                        DiskTensor<double, 2>(tn_name, OrbitString::number_of_strings(i + 1, nvirt_),
+                                OrbitString::number_of_strings(i + 1, nocc_)));
+            }
             residual_expressions_[i] = diagram::FactoredDiagram(
                     diagram::compute_ccp_residual(i + 1, theory.get_level(), theory.do_skip_singles() || t1_transformed_, t1_transformed_));
             break;
         case diagram::Theory::LINEAR:
+            if (i != 0) {
+                tn_files_.push_back(h5::create(tn_name, H5_ACC_TRUNC));
+                tn_amps_.push_back(
+                        DiskTensor<double, 2>(tn_name, OrbitString::number_of_strings(i + 1, nvirt_),
+                                OrbitString::number_of_strings(i + 1, nocc_)));
+            }
             residual_expressions_[i] = diagram::FactoredDiagram(
                     diagram::compute_lcc_residual(i + 1, theory.get_level(), theory.do_skip_singles() || t1_transformed_, t1_transformed_));
             break;
@@ -147,6 +190,9 @@ GeneralCC::~GeneralCC() {
             delete t1_integrals_.df;
         }
     }
+
+    tn_amps_.clear();
+    tn_files_.clear();
 }
 
 std::pair<einsums::Tensor<signed char, 2>, einsums::Tensor<ptrdiff_t, 2>> GeneralCC::get_product_table(int nleft, int nright, int norbs) {
@@ -160,6 +206,59 @@ std::pair<einsums::Tensor<signed char, 2>, einsums::Tensor<ptrdiff_t, 2>> Genera
         write_product_table(mults, inds, base_name);
 
         return {mults, inds};
+    }
+}
+
+void GeneralCC::find_loop_parameters(diagram::triplet const &amps_spec, int Ao_inds, int Io_inds, int C_inds, int K_inds, int *At_inds,
+        int *It_inds, int *B_inds, int *J_inds, size_t *num_At, size_t *num_Ao, size_t *num_It, size_t *num_Io, size_t *num_B,
+        size_t *num_J, size_t *num_C, size_t *num_K) const {
+    unsigned char const num_parts = std::get < 2 > (amps_spec);
+    unsigned char const num_holes = std::get < 1 > (amps_spec) - num_parts;
+    unsigned short const order = static_cast<unsigned short>(std::get < 0 > (amps_spec));
+
+    detail::binomial_storage_type dynamic_list;
+
+    // Start with the easy things.
+    if (At_inds != nullptr) {
+        *At_inds = order - num_parts;
+    }
+    if (It_inds != nullptr) {
+        *It_inds = order - num_holes;
+    }
+
+    if (B_inds != nullptr) {
+        *B_inds = num_parts;
+    }
+    if (J_inds != nullptr) {
+        *J_inds = num_holes;
+    }
+
+    unsigned short nvirt = nvirt_;
+
+    // Now for the sizes.
+    if (num_At != nullptr) {
+        *num_At = detail::binomial_coefficient_driver(nvirt, static_cast<unsigned short>(order - num_parts), &dynamic_list);
+    }
+    if (num_It != nullptr) {
+        *num_It = OrbitString::number_of_strings(order - num_holes, nocc_);
+    }
+    if (num_Ao != nullptr) {
+        *num_Ao = OrbitString::number_of_strings(Ao_inds, nvirt_);
+    }
+    if (num_Io != nullptr) {
+        *num_Io = OrbitString::number_of_strings(Io_inds, nocc_);
+    }
+    if (num_B != nullptr) {
+        *num_B = OrbitString::number_of_strings(num_parts, nvirt_);
+    }
+    if (num_J != nullptr) {
+        *num_J = OrbitString::number_of_strings(num_holes, nocc_);
+    }
+    if (num_C != nullptr) {
+        *num_C = OrbitString::number_of_strings(C_inds, nvirt_);
+    }
+    if (num_K != nullptr) {
+        *num_K = OrbitString::number_of_strings(K_inds, nocc_);
     }
 }
 
